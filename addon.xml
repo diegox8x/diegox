@@ -7,6 +7,10 @@
 
     <extension point="xbmc.python.pluginsource" library="default.py" />
     
+    <extension point="xbmc.addon.metadata">
+    <settings>resources/settings.xml</settings>
+    </extension>
+
     <assets>
         <icon>icon.png</icon>
         <fanart>fanart.jpg</fanart>
