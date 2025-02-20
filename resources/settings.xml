@@ -1,7 +1,0 @@
-<settings>
-    <category label="Configuraciones Generales">
-        <setting id="video_url" type="text" label="URL del Video" default="https://www.example.com/video.mp4"/>
-        <setting id="quality" type="enum" label="Calidad de Video" values="360p|480p|720p|1080p" default="720p"/>
-        <setting id="autoplay" type="bool" label="Reproducción Automática" default="true"/>
-    </category>
-</settings>
