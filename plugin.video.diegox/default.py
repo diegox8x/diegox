@@ -26,7 +26,7 @@ def mostrar_peliculas():
 
 def mostrar_series():
     """Lista de series"""
-    agregar_item("Serie 1", "plugin://plugin.video.miaddon/play?video_id=789", False)
+    agregar_item("Serie 1", "https://www3.animeflv.net/ver/one-piece-3d-1", False)
     agregar_item("Serie 2", "plugin://plugin.video.miaddon/play?video_id=101", False)
     xbmcplugin.endOfDirectory(handle)
 
