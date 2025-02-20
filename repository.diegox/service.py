@@ -10,7 +10,7 @@ else:
     translatePath = xbmc.translatePath
 
 
-addon_id = 'plugin.video.balandro'
+addon_id = 'plugin.video.diegox'
 
 install = False
 
