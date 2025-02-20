@@ -10,7 +10,7 @@
     </extension>
 
     <extension point="xbmc.addon.metadata">
-       <summary>Repositorio de Balandro</summary>
+       <summary>Repositorio de Diegox</summary>
        <assets>
           <icon>icon.png</icon>
           <fanart>fanart.jpg</fanart>
