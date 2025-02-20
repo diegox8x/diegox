@@ -1,0 +1,23 @@
+msgid "Addon Name"
+msgstr "My Kodi Addon"
+
+msgid "Welcome to My Kodi Addon"
+msgstr "Welcome to My Kodi Addon"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid "Play"
+msgstr "Play"
+
+msgid "Stop"
+msgstr "Stop"
+
+msgid "Pause"
+msgstr "Pause"
+
+msgid "Resume"
+msgstr "Resume"
+
+msgid "Error"
+msgstr "An error occurred. Please try again."
