@@ -21,8 +21,8 @@
       [fix] some fix
     </news>
     <assets>
-        <icon>resources/icon.png</icon>
-        <fanart>resources/fanart.jpg</fanart>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
         <banner></banner> <!-- optional -->
         <clearlogo>resources/clearlogo.png</clearlogo> <!-- optional -->
         <screenshot></screenshot> <!-- optional, max. 10 -->
