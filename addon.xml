@@ -62,9 +62,9 @@
 
   <extension point="xbmc.service" library="services.py" start="login|startup"/>
 </addon>
-<addon id="repository.balandro" name="[COLOR aqua]Balandro[/COLOR] Repo" version="4.0.1" provider-name="Team Balandro">
+<addon id="repository.diegox" name="[COLOR aqua]Balandro[/COLOR] Repo" version="4.0.1" provider-name="Team Diegox">
 
-    <extension point="xbmc.addon.repository" name="balandro repo">
+    <extension point="xbmc.addon.repository" name="diegox repo">
         <dir>
             <info>https://raw.githubusercontent.com/diegox8x/diegox/main/addons.xml</info>
             <checksum>https://raw.githubusercontent.com/diegox8x/diegox/main/addons.xml.md5</checksum>
@@ -88,9 +88,9 @@
            [COLOR plum][B]22.x Piers,  21.x Omega,  20.x Nexus,  19.x Matrix,[/B][/COLOR]
            [COLOR plum][B]18.x Leia  y  17.x Krypton[/B][/COLOR]
 
-       [COLOR springgreen][B]Fuente[/COLOR]  [COLOR cyan]repobal.github.io/base/[/B][/COLOR]
+       [COLOR springgreen][B]Fuente[/COLOR]  [COLOR cyan]diegox8x.github.io/diegox/[/B][/COLOR]
 
-       [COLOR firebrick][B]Team[/COLOR]  [COLOR orange]https://github.com/repobal[/B][/COLOR]
+       [COLOR firebrick][B]Team[/COLOR]  [COLOR orange]https://github.com/diegox8x[/B][/COLOR]
 
        [COLOR limegreen][B]Contacto:[/B][/COLOR]
            Foro  www.mimediacenter.info/foro/
