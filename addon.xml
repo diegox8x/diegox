@@ -57,7 +57,6 @@
     <platform>all</platform>
     <license>GNU GPL v3</license>
     <source>https://diegox8x.github.io/diegox/</source>
-    <forum>https://www.mimediacenter.info/foro/</forum>
   </extension>
 
   <extension point="xbmc.service" library="services.py" start="login|startup"/>
@@ -103,7 +102,6 @@
        <platform>all</platform>
        <license>GNU GPL v3</license>
        <source>https://diegox8x.github.io/diegox/</source>
-       <forum>https://www.mimediacenter.info/foro/</forum>
     </extension>
 
     <extension point="xbmc.service" library="service.py" start="login|startup" />
