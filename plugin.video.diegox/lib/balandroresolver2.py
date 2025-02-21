@@ -12,9 +12,9 @@ else:
 
 import xbmc, re, base64, random
 
-from platformcode import logger
+from configuraciones import logger
 
-from core import jsontools
+from dox import jsontools
 
 
 class EstructuraInicial(object):

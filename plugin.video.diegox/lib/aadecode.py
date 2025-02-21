@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-from core import scrapertools
+from dox import scrapertools
 
 def decode(text):
     text = re.sub(r"\s+|/\*.*?\*/", "", text)

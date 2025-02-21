@@ -122,7 +122,7 @@ def dialog_textviewer(heading, text):
 
 
 def dialog_recaptcha(sitekey, referer):
-    from platformcode import recaptcha
+    from configuraciones import recaptcha
 
     return recaptcha.get_recaptcha_response(sitekey, referer)
 
@@ -1111,7 +1111,7 @@ def dialogo_busquedas_por_fallo_web(item):
 
 
 def get_kodi_db():
-    from core import filetools
+    from dox import filetools
 
     # Buscamos el archivo de la BBDD de vídeos más reciente (MyVideos[NUM].db)
     file_db = ''

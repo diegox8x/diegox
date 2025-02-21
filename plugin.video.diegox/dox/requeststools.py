@@ -15,7 +15,7 @@ else:
 
 import time, random
 
-from configuraciones import logger, config, platformtools
+from configuraciones import logger, config, tools
 from dox import scrapertools
 
 
@@ -61,7 +61,7 @@ def read(url, channel):
     logger.info()
 
     if not existe_script:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Falta script.module.requests[/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Falta script.module.requests[/COLOR][/B]' % color_alert)
         return ''
 
     if not url: return ''
@@ -72,7 +72,7 @@ def read(url, channel):
 
         if not data:
             espera = 3
-            platformtools.dialog_notification('Requests', 'Espera requerida de %s segundos' % espera)
+            tools.dialog_notification('Requests', 'Espera requerida de %s segundos' % espera)
             time.sleep(int(espera))
 
             data = read_data(url, headers)
@@ -103,7 +103,7 @@ def read(url, channel):
              if source: break
 
              espera = 5
-             platformtools.dialog_notification(channel.capitalize(), 'Espera requerida de %s segundos' % espera)
+             tools.dialog_notification(channel.capitalize(), 'Espera requerida de %s segundos' % espera)
              time.sleep(int(espera))
 
              source = read_proxy(url, px, headers)
@@ -122,15 +122,15 @@ def read_proxy(url, px, headers):
 
     if source: 
         if '<title>Please Wait... | Cloudflare</title>' in str(source):
-            platformtools.dialog_notification(config.__addon_name, 'Verificando [B][COLOR %s]reCAPTCHA[/COLOR][/B]' % color_alert)
+            tools.dialog_notification(config.__addon_name, 'Verificando [B][COLOR %s]reCAPTCHA[/COLOR][/B]' % color_alert)
             source = read_proxy2(url, px, headers)
 
         elif '<title>You are being redirected...</title>' in str(source) or '<title>Just a moment...</title>' in str(source):
-            platformtools.dialog_notification(config.__addon_name, 'Verificando [B][COLOR %s]Protection[/COLOR][/B]' % color_alert)
+            tools.dialog_notification(config.__addon_name, 'Verificando [B][COLOR %s]Protection[/COLOR][/B]' % color_alert)
             source = read_proxy2(url, px, headers)
 
         if '<title>Just a moment...</title>' in str(source):
-            platformtools.dialog_notification(config.__addon_name, '[COLOR red][B]CloudFlare[COLOR orangered] Protection[/B][/COLOR]')
+            tools.dialog_notification(config.__addon_name, '[COLOR red][B]CloudFlare[COLOR orangered] Protection[/B][/COLOR]')
             source = ''
 
         return source
@@ -199,15 +199,15 @@ def read_data(url, headers):
 
     if data:
         if '<title>Please Wait... | Cloudflare</title>' in str(data):
-            platformtools.dialog_notification(config.__addon_name, 'Verificando [B][COLOR %s]reCAPTCHA[/COLOR][/B]' % color_alert)
+            tools.dialog_notification(config.__addon_name, 'Verificando [B][COLOR %s]reCAPTCHA[/COLOR][/B]' % color_alert)
             data = read_data2(url, headers)
 
         elif '<title>You are being redirected...</title>' in str(data) or '<title>Just a moment...</title>' in str(data):
-            platformtools.dialog_notification(config.__addon_name, 'Verificando [B][COLOR %s]Protection[/COLOR][/B]' % color_alert)
+            tools.dialog_notification(config.__addon_name, 'Verificando [B][COLOR %s]Protection[/COLOR][/B]' % color_alert)
             data = read_data2(url, headers)
 
         if '<title>Just a moment...</title>' in str(data):
-            platformtools.dialog_notification(config.__addon_name, '[COLOR red][B]CloudFlare[COLOR orangered] Protection[/B][/COLOR]')
+            tools.dialog_notification(config.__addon_name, '[COLOR red][B]CloudFlare[COLOR orangered] Protection[/B][/COLOR]')
             data = ''
 
         return data

@@ -17,8 +17,8 @@ else:
 
 import re, base64
 
-from core import httptools, scrapertools
-from platformcode import logger
+from dox import httptools, scrapertools
+from configuraciones import logger
 
 
 patron_domain = '(?:http.*\:)?\/\/(?:.*ww[^\.]*)?\.?(?:[^\.]+\.)?([\w|\-]+\.\w+)(?:\/|\?|$)'

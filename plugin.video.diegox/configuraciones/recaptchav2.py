@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from core import httptools, scrapertools
-from platformcode import logger
+from dox import httptools, scrapertools
+from configuraciones import logger
 
 
 def rev2(site_key, co, sa, loc):

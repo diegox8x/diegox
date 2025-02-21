@@ -527,7 +527,7 @@ def scrap_and_save_tvshow(item, op='add', tvdbinfo=False):
             db.save_show(tmdb_id, item.infoLabels)
         else: # Sino buscar en tmdb
             it = Item( title='', contentType='tvshow', contentSerieName=item.contentSerieName, infoLabels={'tmdb_id': tmdb_id} )
-            from core import tmdb
+            from dox import tmdb
             tmdb.set_infoLabels_item(it)
             db.save_show(tmdb_id, it.infoLabels)
 
@@ -563,7 +563,7 @@ def scrap_and_save_tvshow(item, op='add', tvdbinfo=False):
         db.close()
 
         if not config.get_setting('developer_mode', default=False):
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR cyan]Sin Resultados de Enlaces[/COLOR][/B]')
+            tools.dialog_notification(config.__addon_name, '[B][COLOR cyan]Sin Resultados de Enlaces[/COLOR][/B]')
             return False, ''
 
         return False, 'El canal no devuelve resultados'
@@ -608,7 +608,7 @@ def scrap_and_save_tvshow(item, op='add', tvdbinfo=False):
                 # Guardar datos del episodio
                 if update_infolabels or not db.episode_exists(tmdb_id, it_epi.contentSeason, it_epi.contentEpisodeNumber):
                     if tvdbinfo and it_epi.infoLabels['tvdb_id']:
-                        from core import tvdb
+                        from dox import tvdb
                         tvdb.set_infoLabels_item(it_epi)
 
                     db.save_episode(tmdb_id, it_epi.contentSeason, it_epi.contentEpisodeNumber, it_epi.infoLabels)
@@ -631,7 +631,7 @@ def scrap_and_save_tvshow(item, op='add', tvdbinfo=False):
                 if not db.season_exists(tmdb_id, it_epi.contentSeason):
                     it = Item( title='', contentType='season', contentSerieName=it_epi.contentSerieName, contentSeason=it_epi.contentSeason, infoLabels={'tmdb_id': tmdb_id} )
 
-                    from core import tmdb
+                    from dox import tmdb
                     tmdb.set_infoLabels_item(it)
                     db.save_season(tmdb_id, it.contentSeason, it.infoLabels)
                     cambios.append('T%d' % int(it_epi.contentSeason))
@@ -641,7 +641,7 @@ def scrap_and_save_tvshow(item, op='add', tvdbinfo=False):
             # Guardar datos del episodio
             if update_infolabels or not db.episode_exists(tmdb_id, it_epi.contentSeason, it_epi.contentEpisodeNumber):
                 if tvdbinfo and it_epi.infoLabels['tvdb_id']:
-                    from core import tvdb
+                    from dox import tvdb
                     tvdb.set_infoLabels_item(it_epi)
 
                 db.save_episode(tmdb_id, it_epi.contentSeason, it_epi.contentEpisodeNumber, it_epi.infoLabels)
@@ -655,7 +655,7 @@ def scrap_and_save_tvshow(item, op='add', tvdbinfo=False):
         db.close()
 
         if not config.get_setting('developer_mode', default=False):
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR cyan]Sin Resultados de Enlaces[/COLOR][/B]')
+            tools.dialog_notification(config.__addon_name, '[B][COLOR cyan]Sin Resultados de Enlaces[/COLOR][/B]')
             return False, ''
 
         return False, 'El canal no devuelve temporadas ni episodios válidos'
@@ -688,7 +688,7 @@ def search_new_episodes(tmdb_id, show_progress=False, tvdbinfo=False):
     logger.info('tmdb_id: %s' % tmdb_id)
 
     if show_progress:
-        progreso = platformtools.dialog_progress('Buscando episodios', 'Iniciando la búsqueda de nuevos episodios ...')
+        progreso = tools.dialog_progress('Buscando episodios', 'Iniciando la búsqueda de nuevos episodios ...')
 
     itemlist = [] # lista de items para actualizar cada canal
     tot_cambios = {} # cambios hechos en cada canal
@@ -746,7 +746,7 @@ def search_new_episodes(tmdb_id, show_progress=False, tvdbinfo=False):
 
     if show_progress:
         progreso.close()
-        platformtools.dialog_ok(it_update.contentSerieName, '[COLOR hotpink][B]Proceso Búsqueda Completado.[/B][/COLOR]', muestra_cambios_canales(tot_cambios))
+        tools.dialog_ok(it_update.contentSerieName, '[COLOR hotpink][B]Proceso Búsqueda Completado.[/B][/COLOR]', muestra_cambios_canales(tot_cambios))
         logger.info(muestra_cambios_canales(tot_cambios))
 
     # Actualizar lastscrap si la serie está en tracking_shows
@@ -819,7 +819,7 @@ def check_and_scrap_new_episodes(notification=True):
     else: tit += ' Novedades en %d de ellas.' % int(n_cambios)
 
     if notification:
-        platformtools.dialog_notification('Nuevos episodios', '[COLOR cyan]' + tit + '[/COLOR]')
+        tools.dialog_notification('Nuevos episodios', '[COLOR cyan]' + tit + '[/COLOR]')
 
 
 # Funciones para actualizar solamente infoLabels
@@ -827,7 +827,7 @@ def check_and_scrap_new_episodes(notification=True):
 def update_infolabels_movie(tmdb_id):
     logger.info()
 
-    from core import tmdb
+    from dox import tmdb
 
     db = TrackingData()
 
@@ -860,12 +860,12 @@ def update_infolabels_show(tmdb_id, with_tvdb=False):
     logger.info()
 
     if with_tvdb:
-        from core import tvdb as scrapper
+        from dox import tvdb as scrapper
     else:
-        from core import tmdb as scrapper
+        from dox import tmdb as scrapper
 
     tit = 'Actualizando datos desde ' + ('TVDB' if with_tvdb else 'TMDB')
-    progreso = platformtools.dialog_progress(tit, 'Serie y temporadas ...')
+    progreso = tools.dialog_progress(tit, 'Serie y temporadas ...')
 
     db = TrackingData()
     cambios = []
@@ -928,15 +928,15 @@ def update_infolabels_episodes(tmdb_id, season=-1, episode=-1, with_tvdb=False):
     logger.info()
 
     if with_tvdb:
-        from core import tvdb as scrapper
+        from dox import tvdb as scrapper
     else:
-        from core import tmdb as scrapper
+        from dox import tmdb as scrapper
 
     tit = 'Actualizando episodios desde ' + ('TVDB' if with_tvdb else 'TMDB')
     if season == -1: subtit = 'Todas las temporadas ...'
     elif episode == -1: subtit = 'Temporada %d ...' % int(season)
     else: subtit = 'Temporada %d Episodio %d ...' % (int(season), int(episode))
-    progreso = platformtools.dialog_progress(tit, subtit)
+    progreso = tools.dialog_progress(tit, subtit)
 
     db = TrackingData()
     cambios = []
@@ -984,7 +984,7 @@ def update_season_watched(tmdb_id, season=-1, watched=False):
     logger.info()
 
     # Buscar idPath de plugin://plugin.video.balandro/
-    n, results = platformtools.execute_sql_kodi('SELECT idPath FROM path WHERE strPath=?', (config.__base_url,))
+    n, results = tools.execute_sql_kodi('SELECT idPath FROM path WHERE strPath=?', (config.__base_url,))
     if n == 0:
         logger.error('No encontrado idPath para %s en la bd de Kodi!' % config.__base_url)
         return False
@@ -1001,19 +1001,19 @@ def update_season_watched(tmdb_id, season=-1, watched=False):
 
         item_url = config.build_url(it_minimo)
 
-        n, results = platformtools.execute_sql_kodi('SELECT idFile, playCount FROM files WHERE idPath=? AND strFilename=?', (idPath, item_url))
+        n, results = tools.execute_sql_kodi('SELECT idFile, playCount FROM files WHERE idPath=? AND strFilename=?', (idPath, item_url))
         if n == 0:
             if watched:
-                platformtools.execute_sql_kodi('INSERT INTO files (idPath, strFilename, playCount) VALUES (?, ?, ?)', (idPath, item_url, 1))
+                tools.execute_sql_kodi('INSERT INTO files (idPath, strFilename, playCount) VALUES (?, ?, ?)', (idPath, item_url, 1))
                 logger.info('Marcado como visto %dx%d' % (int(season), int(episode)))
         else:
             idFile = results[0][0]
             if results[0][1] is None and watched:
-                platformtools.execute_sql_kodi('UPDATE files SET playCount=? WHERE idFile=?', (1, idFile))
+                tools.execute_sql_kodi('UPDATE files SET playCount=? WHERE idFile=?', (1, idFile))
                 logger.info('Marcado como visto %dx%d idFile: %s' % (int(season), int(episode), idFile))
 
             elif results[0][1] is not None and not watched:
-                platformtools.execute_sql_kodi('UPDATE files SET playCount=? WHERE idFile=?', (None, idFile))
+                tools.execute_sql_kodi('UPDATE files SET playCount=? WHERE idFile=?', (None, idFile))
                 logger.info('Marcado como NO visto %dx%d idFile: %s' % (int(season), int(episode), idFile))
 
     return True

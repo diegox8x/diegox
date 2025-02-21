@@ -9,8 +9,8 @@ else:
 
 import xbmcgui, xbmc
 
-from platformcode import config, logger, platformtools
-from core import httptools, scrapertools
+from configuraciones import config, logger, tools
+from dox import httptools, scrapertools
 
 
 def get_recaptcha_response(sitekey, referer):

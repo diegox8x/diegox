@@ -15,10 +15,10 @@ REPO_ID = 'repository.diegox'
 REPO_BALANDRO = 'https://raw.githubusercontent.com/diegox8x/diegox/main/' + ver_repo_balandro
 
 
-ADDON_UPDATES_JSON = 'https://raw.githubusercontent.com/repobal/fix/main/updates.json'
-ADDON_UPDATES_ZIP  = 'https://raw.githubusercontent.com/repobal/fix/main/updates.zip'
+ADDON_UPDATES_JSON = 'https://raw.githubusercontent.com/diegox8x/fix/main/updates.json'
+ADDON_UPDATES_ZIP  = 'https://raw.githubusercontent.com/diegox8x/fix/main/updates.zip'
 
-ADDON_VERSION = 'https://raw.githubusercontent.com/diegox8x/base/main/addons.xml'
+ADDON_VERSION = 'https://raw.githubusercontent.com/diegox8x/diegox/main/addons.xml'
 
 
 addon_update_verbose = config.get_setting('addon_update_verbose', default=False)
@@ -52,7 +52,7 @@ def check_repo(force=False):
             for ant in ant_repos:
                 if ant == repo_version:
                     logger.info('Balandro Repo obsoleto')
-                    platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Balandro Repo Obsoleto[/COLOR][/B]' % color_alert)
+                    tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Balandro Repo Obsoleto[/COLOR][/B]' % color_alert)
                     instalar_repo = True
         except:
             re_install_repo = True
@@ -80,7 +80,7 @@ def check_repo(force=False):
 
         time.sleep(2)
         logger.info('Instalando Balandro Repo')
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Instalando Balandro Repo[/COLOR][/B]' % color_infor)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Instalando Balandro Repo[/COLOR][/B]' % color_infor)
 
         try:
             xbmc.executebuiltin('UpdateLocalAddons')
@@ -92,7 +92,7 @@ def check_repo(force=False):
             time.sleep(2)
 
             logger.info('Balandro Repo activado')
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Balandro Repo activado[/COLOR][/B]' % color_avis)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Balandro Repo activado[/COLOR][/B]' % color_avis)
 
             if instalar_repo: time.sleep(6)
         except:
@@ -122,7 +122,7 @@ def check_repo(force=False):
         time.sleep(2)
 
         logger.info('Balandro Repo Re-activado')
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Balandro Repo [COLOR %s]Re-activado[/COLOR][/B]' % (color_adver, color_avis))
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Balandro Repo [COLOR %s]Re-activado[/COLOR][/B]' % (color_adver, color_avis))
 
 
 def check_addon_updates(verbose=False, force=False):
@@ -145,8 +145,8 @@ def check_addon_updates(verbose=False, force=False):
             logger.error('No localizado addon_updates')
 
             if verbose:
-                if '404: Not Found' in data: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Acceso UPDATES[/COLOR][/B]' % color_alert)
-                else: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No localizado addon_updates[/COLOR][/B]' % color_alert)
+                if '404: Not Found' in data: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Acceso UPDATES[/COLOR][/B]' % color_alert)
+                else: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No localizado addon_updates[/COLOR][/B]' % color_alert)
             return False
 
         data = jsontools.load(data)
@@ -154,14 +154,14 @@ def check_addon_updates(verbose=False, force=False):
         if 'addon_version' not in data or 'fix_version' not in data:
             logger.info('Sin Fix pendientes')
 
-            if verbose: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Fix pendientes[/COLOR][/B]' % color_adver)
+            if verbose: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Fix pendientes[/COLOR][/B]' % color_adver)
             return False
 
         current_version = config.get_addon_version(with_fix=False)
         if current_version != data['addon_version']:
             logger.info('Versión Incorrecta NO se actualizan Fixes para la versión %s' % current_version)
 
-            if verbose: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Versión incorrecta NO se actualizan Fixes[/COLOR][/B]' % color_alert)
+            if verbose: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Versión incorrecta NO se actualizan Fixes[/COLOR][/B]' % color_alert)
             return False
 
         if os.path.exists(last_fix_json):
@@ -172,7 +172,7 @@ def check_addon_updates(verbose=False, force=False):
 
                 if verbose:
                     tex = '[B][COLOR %s]Está actualizado versión %s.fix%d[/COLOR][/B]' % (color_adver, data['addon_version'], data['fix_version'])
-                    platformtools.dialog_notification(config.__addon_name, tex)
+                    tools.dialog_notification(config.__addon_name, tex)
 
                 return False
 
@@ -185,7 +185,7 @@ def check_addon_updates(verbose=False, force=False):
         if down_stats['downloadStatus'] != 2:
             logger.error('No se pudo descargar la actualización')
 
-            if verbose: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se pudo descargar la actualización[/COLOR][/B]' % color_alert)
+            if verbose: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se pudo descargar la actualización[/COLOR][/B]' % color_alert)
             return False
 
         itt = 0
@@ -194,7 +194,7 @@ def check_addon_updates(verbose=False, force=False):
 
         while not data['hash'] == hash_localfilename:
             if itt == 0:
-                if verbose: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Acreditando fix Espere...[/COLOR][/B]' % color_avis)
+                if verbose: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Acreditando fix Espere...[/COLOR][/B]' % color_avis)
 
             itt += 1
 
@@ -211,18 +211,18 @@ def check_addon_updates(verbose=False, force=False):
 
             if down_stats['downloadStatus'] != 2:
                 logger.info('No se pudo descargar la actualización')
-                if verbose: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se pudo descargar la actualización[/COLOR][/B]' % color_alert)
+                if verbose: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se pudo descargar la actualización[/COLOR][/B]' % color_alert)
                 return False
 
             if verbose:
-                if itt > 1: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Acreditando fix (itt %s Espere...)[/COLOR][/B]' % (color_avis, itt))
+                if itt > 1: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Acreditando fix (itt %s Espere...)[/COLOR][/B]' % (color_avis, itt))
 
             hash_localfilename = check_zip_hash(localfilename)
             time.sleep(5)
 
             if itt == 5 and not data['hash'] == hash_localfilename: 
                 logger.info('No se pudo Acreditar el fix')
-                if verbose: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se pudo acreditar el Fix[/COLOR][/B]' % color_alert)
+                if verbose: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se pudo acreditar el Fix[/COLOR][/B]' % color_alert)
                 return False
 
         if data['hash'] == hash_localfilename:
@@ -252,7 +252,7 @@ def check_addon_updates(verbose=False, force=False):
 
             if verbose:
                 tex = '[B][COLOR %s]Actualizado a la versión %s.fix%d[/COLOR][/B]' % (color_avis, data['addon_version'], data['fix_version'])
-                platformtools.dialog_notification(config.__addon_name, tex)
+                tools.dialog_notification(config.__addon_name, tex)
 
             return True
 
@@ -260,7 +260,7 @@ def check_addon_updates(verbose=False, force=False):
         logger.error('Error comprobación actualizaciones!')
         logger.error(traceback.format_exc())
 
-        if verbose: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Error comprobación actualizaciones[/COLOR][/B]' % color_alert)
+        if verbose: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Error comprobación actualizaciones[/COLOR][/B]' % color_alert)
         return False
 
 

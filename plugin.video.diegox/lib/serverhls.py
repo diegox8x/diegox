@@ -16,8 +16,8 @@ import xbmc, requests
 
 from threading import Thread
 
-from core import scrapertools
-from platformcode import logger
+from dox import scrapertools
+from configuraciones import logger
 
 
 domain = ""
