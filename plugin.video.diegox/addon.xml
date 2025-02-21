@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.diegox" name="Diegox" version="4.0.15" provider-name="Diegox">
+<addon id="plugin.video.diego" name="Diegox" version="4.0.15" provider-name="Team Diegox">
   <requires>
      <import addon="script.module.requests"/>
   </requires>
-  
+
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
   </extension>
 
   <extension point="xbmc.addon.metadata">
-    <summary>Balandro es un Navegador de páginas Webs</summary>
+    <summary> Diegox es un navegador de páginas Webs</summary>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
@@ -56,7 +56,8 @@
     <disclaimer>[COLOR aqua][B]Los Propietarios y Distribuidores de este Add-On no Proveen ni Distribuyen Ningún Contenido Mostrado por el Add-On, ni Tienen Afiliación alguna con los Proveedores/Webs de contenidos. [COLOR tan]Está Prohibida su distribución, solo ó junto con Contenidos Multimedia Protegidos por los Derechos de Autor. [COLOR chocolate]Si este tipo de contenido está Prohibido en su País, solamente Usted será el Responsable de su uso. [COLOR white]La vulneración de estas prohibiciones Exonerarán de cualquier Culpa a sus Autores, [COLOR red]Siendo el unico Responsable quien lo haya Distribuido ó Utilizado Ilegalmente.[/B][/COLOR]</disclaimer>
     <platform>all</platform>
     <license>GNU GPL v3</license>
-    <source>https://diegox8x.github.io/diegox/</source>  
+    <source>https://diegox8x.github.io/diegox/</source>
+    <forum>https://www.mimediacenter.info/foro/</forum>
   </extension>
 
   <extension point="xbmc.service" library="services.py" start="login|startup"/>
