@@ -2,9 +2,9 @@
 
 import os, re, xbmcgui
 
-from platformcode import config, logger, platformtools
-from core.item import Item
-from core import channeltools, scrapertools, httptools, proxytools, filetools
+from configuraciones import config, logger, tools
+from dox.item import Item
+from dox import channeltools, scrapertools, httptools, proxytools, filetools
 
 
 color_list_prefe = config.get_setting('channels_list_prefe_color', default='gold')

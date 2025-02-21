@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from platformcode import config, logger, platformtools
+from configuraciones import config, logger, tools
 
-from core.item import Item
-from core import tmdb
+from dox.item import Item
+from dox import tmdb
 
 
 thumbs = 'https://image.tmdb.org/'
@@ -124,7 +124,7 @@ def show_help(item):
     txt += '[CR]Si al buscar por persona [COLOR violet][B]se obtiene una sola coincidencia[/B][/COLOR] de películas, se listan directamente sus películas y series (Ej: Stanley Kubrick).'
     txt += ' Si hubierna varios resultados se muestra una [COLOR yellowgreen][B]Lista de Personas[/B][/COLOR] para seleccionar la que corresponda (Ej: Kubrick).'
 
-    platformtools.dialog_textviewer('Información búsquedas y listas en TMDB', txt)
+    tools.dialog_textviewer('Información búsquedas y listas en TMDB', txt)
 
     return True
 
@@ -286,7 +286,7 @@ def personas(item):
 
     if not item.person_id:
         last_search = config.get_setting('search_last_person', default='')
-        tecleado = platformtools.dialog_input(last_search, 'Nombre de la persona a buscar')
+        tecleado = tools.dialog_input(last_search, 'Nombre de la persona a buscar')
 
         if tecleado is None or tecleado == '': return
 
@@ -295,7 +295,7 @@ def personas(item):
         elementos = tmdb.get_person(tecleado)
 
         if len(elementos) == 0:
-            platformtools.dialog_notification(tecleado, '[COLOR coral]Sin resultados[/COLOR]')
+            tools.dialog_notification(tecleado, '[COLOR coral]Sin resultados[/COLOR]')
             return
         elif len(elementos) == 1:
             item.person_id = elementos[0]['id']
@@ -317,10 +317,10 @@ def personas(item):
                 thumb = ''
                 if elemento['profile_path']: thumb = thumbs + 't/p/w235_and_h235_face%s' % elemento['profile_path']
 
-                opciones.append(platformtools.listitem_to_select(elemento['name'], info, thumb))
+                opciones.append(tools.listitem_to_select(elemento['name'], info, thumb))
                 opciones_ids.append(elemento['id'])
 
-            ret = platformtools.dialog_select('Selecciona la persona que buscas', opciones, useDetails=True)
+            ret = tools.dialog_select('Selecciona la persona que buscas', opciones, useDetails=True)
             if ret == -1: return
 
             item.person_id = opciones_ids[ret]

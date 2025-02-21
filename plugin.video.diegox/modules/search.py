@@ -10,9 +10,9 @@ import os, time
 
 from threading import Thread
 
-from platformcode import config, logger, platformtools
-from core.item import Item
-from core import channeltools, scrapertools
+from configuraciones import config, logger, tools
+from dox.item import Item
+from dox import channeltools, scrapertools
 
 
 color_list_prefe = config.get_setting('channels_list_prefe_color', default='gold')
@@ -479,7 +479,7 @@ def show_help_parameters(item):
 
         if not hay_lastest: txt += '[CR]   [COLOR cyan][B]Sin textos memorizados[/B][/COLOR]'
 
-    platformtools.dialog_textviewer('Información sobre sus parámetros de búsquedas', txt)
+    tools.dialog_textviewer('Información sobre sus parámetros de búsquedas', txt)
 
     return True
 
@@ -511,7 +511,7 @@ def show_help(item):
     if config.get_setting('tracking_weberror_dialog', default=True):
         txt += '[CR][CR]Desde cualquier [COLOR deepskyblue][B]Película[/B][/COLOR] ó [COLOR hotpink][B]Serie[/B][/COLOR] guardada en [COLOR tan][B]Preferidos[/B][/COLOR], si al acceder se produce un error en la web, se ofrece un diálogo para volver a buscar esa referencia ([COLOR gold][B]Misma/Parecida/Similar[/B][/COLOR]) en los demás canales ó en el mismo canal (por si los enlaces ya no funcionan).'
 
-    platformtools.dialog_textviewer('Información sobre búsquedas', txt)
+    tools.dialog_textviewer('Información sobre búsquedas', txt)
 
     return True
 
@@ -559,7 +559,7 @@ def do_search(item, tecleado):
 
     search_limit_by_channel = config.get_setting('search_limit_by_channel', default=2)
 
-    progreso = platformtools.dialog_progress('Buscando ' + '[B][COLOR yellow]' + tecleado + '[/B][/COLOR]', '...')
+    progreso = tools.dialog_progress('Buscando ' + '[B][COLOR yellow]' + tecleado + '[/B][/COLOR]', '...')
 
     # ~ status para descartar desactivados por el usuario
     if item.search_special == 'anime' or item.search_special == 'dorama':
@@ -706,7 +706,7 @@ def do_search(item, tecleado):
             if 'proxies' in ch['notes'].lower():
                 cfg_proxies_channel = 'channel_' + ch['name'].lower() + '_proxies'
                 if config.get_setting(cfg_proxies_channel, default=''):
-                    if no_channels: platformtools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por proxies[/COLOR][/B]' % color_adver)
+                    if no_channels: tools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por proxies[/COLOR][/B]' % color_adver)
 
                     num_canales = num_canales - 1
                     continue
@@ -714,7 +714,7 @@ def do_search(item, tecleado):
         if only_includes:
             channels_preselct = str(only_includes).replace('[', '').replace(']', ',')
             if not ("'" + ch['id'] + "'") in str(channels_preselct):
-                if no_channels: platformtools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado no está en Incluidos[/COLOR][/B]' % color_exec)
+                if no_channels: tools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado no está en Incluidos[/COLOR][/B]' % color_exec)
 
                 num_canales = num_canales - 1
                 continue
@@ -724,26 +724,26 @@ def do_search(item, tecleado):
                 if only_includes:
                     channels_preselct = str(only_includes).replace('[', '').replace(']', ',')
                     if not ("'" + ch['id'] + "'") in str(channels_preselct):
-                        if no_channels: platformtools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado no está en Incluidos[/COLOR][/B]' % color_exec)
+                        if no_channels: tools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado no está en Incluidos[/COLOR][/B]' % color_exec)
 
                         num_canales = num_canales - 1
                         continue
                 else:
-                    platformtools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por CloudFlare Protection[/COLOR][/B]' % color_exec)
+                    tools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por CloudFlare Protection[/COLOR][/B]' % color_exec)
                     num_canales = num_canales - 1
                     continue
 
         if channels_search_excluded:
             channels_preselct = str(channels_search_excluded).replace('[', '').replace(']', ',')
             if ("'" + ch['id'] + "'") in str(channels_preselct):
-                if no_channels: platformtools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por Excluido[/COLOR][/B]' % color_exec)
+                if no_channels: tools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por Excluido[/COLOR][/B]' % color_exec)
 
                 num_canales = num_canales - 1
                 continue
 
         cfg_searchable_channel = 'channel_' + ch['id'] + '_no_searchable'
         if config.get_setting(cfg_searchable_channel, default=False):
-            if no_channels: platformtools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por Excluido[/COLOR][/B]' % color_adver)
+            if no_channels: tools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por Excluido[/COLOR][/B]' % color_adver)
             num_canales = num_canales - 1
             continue
 
@@ -888,7 +888,7 @@ def do_search(item, tecleado):
             if 'itemlist_search' in ch:
                 if not PY3:
                     if 'mismatched' in ch['clusters']:
-                        platformtools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por incompatible[/COLOR][/B]' % color_exec)
+                        tools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por incompatible[/COLOR][/B]' % color_exec)
                         continue
 
                 if len(ch['itemlist_search']) == 0:
@@ -946,7 +946,7 @@ def do_search(item, tecleado):
                                 continue
 
                         else:
-                            if no_channels: platformtools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado sin resultados[/COLOR][/B]' % color_avis)
+                            if no_channels: tools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado sin resultados[/COLOR][/B]' % color_avis)
                             continue
                 else:
                     action = 'search'
@@ -1000,7 +1000,7 @@ def do_search(item, tecleado):
 
                     if not PY3:
                         if 'mismatched' in ch['clusters']:
-                            platformtools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por incompatible[/COLOR][/B]' % color_exec)
+                            tools.dialog_notification(ch['name'], '[B][COLOR %s]Ignorado por incompatible[/COLOR][/B]' % color_exec)
                             continue
 
                     if con_torrents:

@@ -16,9 +16,9 @@ else:
 
 import os, xbmc, xbmcgui, xbmcaddon
 
-from platformcode import logger, config, platformtools, updater
-from core import filetools, scrapertools
-from core.item import Item
+from configuraciones import logger, config, tools, updater
+from dox import filetools, scrapertools
+from dox.item import Item
 
 from modules import filters
 
@@ -431,11 +431,11 @@ def submnu_center(item):
 
         itemlist.append(item.clone( channel='actions', action='manto_thumbs', title=' - Eliminar [B][COLOR cyan](Si ejecuta es Obligatorio Re-iniciar Media Center)[/B][/COLOR]', thumbnail=config.get_thumb('keyboard'), text_color='red' ))
 
-    if item.helper: platformtools.itemlist_refresh()
+    if item.helper: tools.itemlist_refresh()
 
     if not itemlist:
         if item.helper:
-            platformtools.dialog_notification(config.__addon_name + ' [COLOR olive][B]Media Center[/B][/COLOR]', '[B][COLOR cyan]Nada que Limpiar[/B][/COLOR]')
+            tools.dialog_notification(config.__addon_name + ' [COLOR olive][B]Media Center[/B][/COLOR]', '[B][COLOR cyan]Nada que Limpiar[/B][/COLOR]')
             return
 
     return itemlist
@@ -504,11 +504,11 @@ def submnu_addons(item):
 
             itemlist.append(item.clone( channel='actions', action='manto_addons_temp', title=' - Eliminar [B][COLOR violet](Si ejecuta es Recomendable Re-iniciar Media Center)[/B][/COLOR]', thumbnail=config.get_thumb('keyboard'), text_color='red' ))
 
-    if item.helper: platformtools.itemlist_refresh()
+    if item.helper: tools.itemlist_refresh()
 
     if not presentar:
         if item.helper:
-            platformtools.dialog_notification(config.__addon_name + ' [COLOR olive][B]Add-Ons[/B][/COLOR]', '[B][COLOR cyan]Nada que Limpiar[/B][/COLOR]')
+            tools.dialog_notification(config.__addon_name + ' [COLOR olive][B]Add-Ons[/B][/COLOR]', '[B][COLOR cyan]Nada que Limpiar[/B][/COLOR]')
             return
 
     return itemlist
@@ -643,7 +643,7 @@ def submnu_resto_addons(item):
     if item.all_addons: tex_cab = 'Add-Ons Instalados'
     else: tex_cab = 'Add-Ons Instalados con Datos'
 
-    platformtools.dialog_textviewer(tex_cab, txt)
+    tools.dialog_textviewer(tex_cab, txt)
 
 
 def submnu_sistema(item):
@@ -734,11 +734,11 @@ def submnu_sistema(item):
 
             itemlist.append(item.clone( channel='actions', action='manto_folder_addon', title= " - Eliminar", thumbnail=config.get_thumb('computer'), text_color='red' ))
 
-    if item.helper: platformtools.itemlist_refresh()
+    if item.helper: tools.itemlist_refresh()
 
     if not itemlist:
         if item.helper:
-            platformtools.dialog_notification(config.__addon_name + ' [COLOR olive][B]Sistema[/B][/COLOR]', '[B][COLOR cyan]Nada que Limpiar[/B][/COLOR]')
+            tools.dialog_notification(config.__addon_name + ' [COLOR olive][B]Sistema[/B][/COLOR]', '[B][COLOR cyan]Nada que Limpiar[/B][/COLOR]')
             return
 
     return itemlist
@@ -810,11 +810,11 @@ def submnu_logs(item):
 
         itemlist.append(item.clone( channel='actions', action='manto_temporales', title='Eliminar Todos los LOGS', _logs = True, thumbnail=config.get_thumb('keyboard'), text_color='red' ))
 
-    if item.helper: platformtools.itemlist_refresh()
+    if item.helper: tools.itemlist_refresh()
 
     if not itemlist:
         if item.helper:
-            platformtools.dialog_notification(config.__addon_name + ' [COLOR olive][B]Logs[/B][/COLOR]', '[B][COLOR cyan]Nada que Limpiar[/B][/COLOR]')
+            tools.dialog_notification(config.__addon_name + ' [COLOR olive][B]Logs[/B][/COLOR]', '[B][COLOR cyan]Nada que Limpiar[/B][/COLOR]')
             return
 
     return itemlist
@@ -874,11 +874,11 @@ def submnu_temporales(item):
 
         itemlist.append(item.clone( channel='actions', action='manto_temporales', title='Eliminar', thumbnail=config.get_thumb('keyboard'), text_color='red' ))
 
-    if item.helper: platformtools.itemlist_refresh()
+    if item.helper: tools.itemlist_refresh()
 
     if not itemlist:
         if item.helper:
-            platformtools.dialog_notification(config.__addon_name + ' [COLOR olive][B]Temporales[/B][/COLOR]', '[B][COLOR cyan]Nada que Limpiar[/B][/COLOR]')
+            tools.dialog_notification(config.__addon_name + ' [COLOR olive][B]Temporales[/B][/COLOR]', '[B][COLOR cyan]Nada que Limpiar[/B][/COLOR]')
             return
 
     return itemlist
@@ -1107,7 +1107,7 @@ def copy_dev(item):
     existe = filetools.exists(file)
 
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se localiza el fichero dev-notes.txt[/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se localiza el fichero dev-notes.txt[/COLOR][/B]' % color_alert)
         return
 
     destino_path = xbmcgui.Dialog().browseSingle(3, 'Seleccionar carpeta dónde copiar', 'files', '', False, False, '')
@@ -1117,10 +1117,10 @@ def copy_dev(item):
     destino = filetools.join(destino_path, 'dev-notes.txt')
 
     if not filetools.copy(origen, destino, silent=False):
-        platformtools.dialog_ok(config.__addon_name, 'Error, no se ha podido copiar el fichero dev-notes.txt!', origen, destino)
+        tools.dialog_ok(config.__addon_name, 'Error, no se ha podido copiar el fichero dev-notes.txt!', origen, destino)
         return
 
-    platformtools.dialog_notification('Fichero copiado', 'dev-notes.txt')
+    tools.dialog_notification('Fichero copiado', 'dev-notes.txt')
 
 
 def test_providers(item):
@@ -1188,14 +1188,14 @@ def test_providers(item):
 
     preselect = 0
     opciones_provider = sorted(opciones_provider, key=lambda x: x[0])
-    ret = platformtools.dialog_select('Proveedores de proxies', opciones_provider, preselect=preselect)
+    ret = tools.dialog_select('Proveedores de proxies', opciones_provider, preselect=preselect)
     if ret == -1: return
 
     provider = opciones_provider[ret]
 
     domain = 'https://'
 
-    domain = platformtools.dialog_input(default=domain, heading='Indicar Dominio a Testear  -->  [COLOR %s]https://??????[/COLOR]' % color_avis)
+    domain = tools.dialog_input(default=domain, heading='Indicar Dominio a Testear  -->  [COLOR %s]https://??????[/COLOR]' % color_avis)
 
     if domain is None: domain = ''
     elif domain == 'https://': domain = ''
@@ -1219,18 +1219,18 @@ def test_providers(item):
     if proxies:
         if proxies_encontrados: return
         else:
-           platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Proxies localizados[/COLOR][/B]' % color_exec)
+           tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Proxies localizados[/COLOR][/B]' % color_exec)
            return
 
-    if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B] Test_Providers[/B][/COLOR]', '[COLOR yellowgreen][B]¿ Desea efectuar el Test del Resultado ?[/B][/COLOR]'):
+    if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B] Test_Providers[/B][/COLOR]', '[COLOR yellowgreen][B]¿ Desea efectuar el Test del Resultado ?[/B][/COLOR]'):
         from modules import tester
 
         config.set_setting('channel_test_providers_dominio', domain)
 
         try: tester.test_channel('test_providers')
-        except: platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] Test_Providers[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Test Ignorado[/B][/COLOR]' % color_alert)
+        except: tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] Test_Providers[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Test Ignorado[/B][/COLOR]' % color_alert)
 
-    else: platformtools.dialog_notification(config.__addon_name + ' ' + provider, '[B][COLOR %s]Comprobar Proveedor[/COLOR][/B]' % color_alert)
+    else: tools.dialog_notification(config.__addon_name + ' ' + provider, '[B][COLOR %s]Comprobar Proveedor[/COLOR][/B]' % color_alert)
 
     config.set_setting('dominio', '', 'test_providers')
     config.set_setting('proxies', '', 'test_providers')
@@ -1306,7 +1306,7 @@ def test_tplus(item):
 
     opciones_tplus = sorted(opciones_tplus, key=lambda x: x[0])
 
-    ret = platformtools.dialog_select('[COLOR cyan][B]Proveedores Proxies Tplus[/B][/COLOR]', opciones_tplus, preselect=preselect)
+    ret = tools.dialog_select('[COLOR cyan][B]Proveedores Proxies Tplus[/B][/COLOR]', opciones_tplus, preselect=preselect)
     if ret == -1: return -1
 
     if opciones_tplus[ret] == 'Openproxy.space http': proxies_tplus = '0'
@@ -1405,11 +1405,11 @@ def test_all_webs(item):
         elif item.unsatisfactory: text = '¿ Iniciar Test Web de los Posibles Canales [B][COLOR gold]Insatisfactorios[/B][/COLOR] ?'
         else: text = '¿ Iniciar Test Web de [B][COLOR gold]TODOS[/B][/COLOR] los Canales ?'
 
-        if not platformtools.dialog_yesno(config.__addon_name, text): return
+        if not tools.dialog_yesno(config.__addon_name, text): return
 
     if item.unsatisfactory: config.set_setting('developer_test_channels', 'unsatisfactory')
 
-    from core import channeltools
+    from dox import channeltools
 
     from modules import tester
 
@@ -1461,10 +1461,10 @@ def test_all_webs(item):
 
             txt = tester.test_channel(ch['name'])
         except:
-            if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[B][COLOR red]Error en la comprobación.[/B][/COLOR]', '[COLOR yellowgreen][B]¿ Desea comprobar el Canal de nuevo ?[/B][/COLOR]'):
+            if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[B][COLOR red]Error en la comprobación.[/B][/COLOR]', '[COLOR yellowgreen][B]¿ Desea comprobar el Canal de nuevo ?[/B][/COLOR]'):
                 try: txt = tester.test_channel(ch['name'])
                 except:
-                     platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
+                     tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
                      tests_all_webs.append(ch['name'])
                      continue
             else:
@@ -1477,89 +1477,89 @@ def test_all_webs(item):
 
         if 'code: [COLOR springgreen][B]200' in str(txt):
             if 'invalid:' in str(txt):
-                platformtools.dialog_textviewer(ch['name'], txt)
+                tools.dialog_textviewer(ch['name'], txt)
 
                 if ' con proxies ' in str(txt):
-                    if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]¿ Desea Iniciar una nueva Búsqueda de Proxies en el Canal ?[/B][/COLOR]'):
+                    if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]¿ Desea Iniciar una nueva Búsqueda de Proxies en el Canal ?[/B][/COLOR]'):
                         _proxies(item, ch['id'])
 
                         try: txt = tester.test_channel(ch['name'])
                         except:
-                             platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
+                             tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
                              tests_all_webs.append(ch['name'])
                              continue
 
                         if not 'code: [COLOR springgreen][B]200' in str(txt):
                             if ' con proxies ' in str(txt):
-                                platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
+                                tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
                                 tests_all_webs.append(ch['name'])
                         else:
                             rememorize = True
 
                 elif 'Sin proxies' in str(txt):
-                    if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR chartreuse][B]Quizás necesite Proxies.[/B][/COLOR] ¿ Desea Iniciar la Búsqueda de Proxies en el Canal ?'):
+                    if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR chartreuse][B]Quizás necesite Proxies.[/B][/COLOR] ¿ Desea Iniciar la Búsqueda de Proxies en el Canal ?'):
                         _proxies(item, ch['id'])
 
                         try: txt = tester.test_channel(ch['name'])
                         except:
-                             platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
+                             tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
                              tests_all_webs.append(ch['name'])
                              continue
 
                         if not 'code: [COLOR springgreen][B]200' in str(txt):
                             if 'Sin proxies' in str(txt):
-                                platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
+                                tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
                                 tests_all_webs.append(ch['name'])
                         else:
                             rememorize = True
 
                 if 'invalid:' in str(txt):
                     if not 'Suspendida' in str(txt):
-                        if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '¿ Desea comprobar el Canal de nuevo, [COLOR red][B]por Acceso sin Host Válido en los datos. [/B][/COLOR]?'):
+                        if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '¿ Desea comprobar el Canal de nuevo, [COLOR red][B]por Acceso sin Host Válido en los datos. [/B][/COLOR]?'):
                             try: txt = tester.test_channel(ch['name'])
                             except:
-                                 platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
+                                 tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
                                  tests_all_webs.append(ch['name'])
                                  continue
 
                             if 'code: [COLOR springgreen][B]200' in str(txt):
                                 if 'invalid:' in str(txt):
-                                    platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado el Acceso sin Host Válido en los datos.[/B][/COLOR]')
+                                    tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado el Acceso sin Host Válido en los datos.[/B][/COLOR]')
                                     tests_all_webs.append(ch['name'])
 
             elif 'Falso Positivo.' in str(txt):
-                platformtools.dialog_textviewer(ch['name'], txt)
+                tools.dialog_textviewer(ch['name'], txt)
 
                 if ' con proxies ' in str(txt):
-                    if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]¿ Desea Iniciar una nueva Búsqueda de Proxies en el Canal ?[/B][/COLOR]'):
+                    if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]¿ Desea Iniciar una nueva Búsqueda de Proxies en el Canal ?[/B][/COLOR]'):
                         _proxies(item, ch['id'])
 
                         try: txt = tester.test_channel(ch['name'])
                         except:
-                              platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
+                              tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
                               tests_all_webs.append(ch['name'])
                               continue
 
                         if not 'code: [COLOR springgreen][B]200' in str(txt):
                             if ' con proxies ' in str(txt):
-                                platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
+                                tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
                                 tests_all_webs.append(ch['name'])
                         else:
                             rememorize = True
 
                 elif 'Sin proxies' in str(txt):
-                    if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR chartreuse][B]Quizás necesite Proxies.[/B][/COLOR] ¿ Desea Iniciar la Búsqueda de Proxies en el Canal ?'):
+                    if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR chartreuse][B]Quizás necesite Proxies.[/B][/COLOR] ¿ Desea Iniciar la Búsqueda de Proxies en el Canal ?'):
                         _proxies(item, ch['id'])
 
                         try: txt = tester.test_channel(ch['name'])
                         except:
-                             platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
+                             tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
                              tests_all_webs.append(ch['name'])
                              continue
 
                         if not 'code: [COLOR springgreen][B]200' in str(txt):
                             if 'Sin proxies' in str(txt):
-                                platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
+                                tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
                                 tests_all_webs.append(ch['name'])
                         else:
                             rememorize = True
@@ -1602,25 +1602,25 @@ def test_all_webs(item):
                                     tests_all_webs.append(ch['name'])
                                     continue
 
-                    if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '¿ Desea comprobar el Canal de nuevo, [COLOR red][B]por Falso Positivo. [/B][/COLOR]?'):
+                    if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '¿ Desea comprobar el Canal de nuevo, [COLOR red][B]por Falso Positivo. [/B][/COLOR]?'):
                         try: txt = tester.test_channel(ch['name'])
                         except:
-                             platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
+                             tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
                              tests_all_webs.append(ch['name'])
                              continue
 
                         if 'code: [COLOR springgreen][B]200' in str(txt):
                             if 'Falso Positivo.' in str(txt):
-                                platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado el Falso Positivo.[/B][/COLOR]')
+                                tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado el Falso Positivo.[/B][/COLOR]')
                                 tests_all_webs.append(ch['name'])
 
             if ' al parecer No se necesitan' in str(txt):
-                if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]¿ Desea Quitar los Proxies del Canal ?[/B][/COLOR], porqué parece que NO se necesitan.'):
+                if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]¿ Desea Quitar los Proxies del Canal ?[/B][/COLOR], porqué parece que NO se necesitan.'):
                     _quitar_proxies(item, ch['id'])
 
                     try: txt = tester.test_channel(ch['name'])
                     except:
-                         platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
+                         tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
                          tests_all_webs.append(ch['name'])
                          continue
 
@@ -1688,35 +1688,35 @@ def test_all_webs(item):
 
            if not 'nuevo:' in txt:
                if ' con proxies ' in str(txt):
-                   if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]¿ Desea Iniciar una nueva Búsqueda de Proxies en el Canal ?[/B][/COLOR]'):
+                   if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]¿ Desea Iniciar una nueva Búsqueda de Proxies en el Canal ?[/B][/COLOR]'):
                        _proxies(item, ch['id'])
 
                        try: txt = tester.test_channel(ch['name'])
                        except:
-                            platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
+                            tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
                             tests_all_webs.append(ch['name'])
                             continue
 
                        if not 'code: [COLOR springgreen][B]200' in str(txt):
                            if ' con proxies ' in str(txt):
-                               platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
+                               tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
                                tests_all_webs.append(ch['name'])
                        else:
                            rememorize = True
 
                elif 'Sin proxies' in str(txt):
-                   if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR chartreuse][B]Quizás necesite Proxies.[/B][/COLOR] ¿ Desea Iniciar la Búsqueda de Proxies en el Canal ?'):
+                   if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR chartreuse][B]Quizás necesite Proxies.[/B][/COLOR] ¿ Desea Iniciar la Búsqueda de Proxies en el Canal ?'):
                        _proxies(item, ch['id'])
 
                        try: txt = tester.test_channel(ch['name'])
                        except:
-                            platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
+                            tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B] ' + ch['name'] + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Canal Ignorado[/B][/COLOR]' % color_alert)
                             tests_all_webs.append(ch['name'])
                             continue
 
                        if not 'code: [COLOR springgreen][B]200' in str(txt):
                            if 'Sin proxies' in str(txt):
-                               platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
+                               tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + ch['name'] + '[/B][/COLOR]', '[COLOR red][B]No se ha solucionado Buscando Nuevos Proxies.[/B][/COLOR]')
                                tests_all_webs.append(ch['name'])
                        else:
                            rememorize = True
@@ -1739,18 +1739,18 @@ def test_all_webs(item):
 
     if i > 0:
         if not tests_all_webs:
-            platformtools.dialog_ok(config.__addon_name, 'Canales Testeados ' + str(i))
+            tools.dialog_ok(config.__addon_name, 'Canales Testeados ' + str(i))
         else:
             if not config.get_setting('developer_mode', default=False):
-                platformtools.dialog_ok(config.__addon_name, 'Canales Testeados ' + str(i))
+                tools.dialog_ok(config.__addon_name, 'Canales Testeados ' + str(i))
             else:
-                if platformtools.dialog_yesno(config.__addon_name, 'Canales Testeados ' + str(i), '[B][COLOR red]Hay Conflictos. [COLOR yellow]Desea Verlos ?[/B][/COLOR]'):
+                if tools.dialog_yesno(config.__addon_name, 'Canales Testeados ' + str(i), '[B][COLOR red]Hay Conflictos. [COLOR yellow]Desea Verlos ?[/B][/COLOR]'):
                     txt_conflict = ''
 
                     for conflict in tests_all_webs:
                         txt_conflict += conflict + '[CR]'
 
-                    platformtools.dialog_textviewer('Canales con Conflictos', txt_conflict)
+                    tools.dialog_textviewer('Canales con Conflictos', txt_conflict)
 
     config.set_setting('developer_test_channels', '')
 
@@ -1767,7 +1767,7 @@ def test_one_channel(item):
     try:
         filters.show_channels_list(item)
     except:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR red]Error comprobación, Reintentelo de Nuevo[/B][/COLOR]')
+        tools.dialog_notification(config.__addon_name, '[B][COLOR red]Error comprobación, Reintentelo de Nuevo[/B][/COLOR]')
 
 
 def _proxies(item, channel):
@@ -1793,11 +1793,11 @@ def test_all_srvs(item):
         if item.unsatisfactory: text = '¿ Iniciar Test Web de los Posibles Servidores [B][COLOR fuchsia]Insatisfactorios[/B][/COLOR] ?'
         else: text = '¿ Iniciar Test Web de [B][COLOR fuchsia]TODOS[/B][/COLOR] los Servidores ?'
 
-        if not platformtools.dialog_yesno(config.__addon_name, text): return
+        if not tools.dialog_yesno(config.__addon_name, text): return
 
     if item.unsatisfactory: config.set_setting('developer_test_servers', 'unsatisfactory')
 
-    from core import jsontools
+    from dox import jsontools
 
     from modules import tester
 
@@ -1849,10 +1849,10 @@ def test_all_srvs(item):
 
             txt = tester.test_server(dict_server['name'])
         except:
-            if platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + dict_server['name'] + '[/B][/COLOR]', '[B][COLOR red]Error en la comprobación.[/B][/COLOR]', '[COLOR yellowgreen][B]¿ Desea comprobar el Servidor de nuevo ?[/B][/COLOR]'):
+            if tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]' + dict_server['name'] + '[/B][/COLOR]', '[B][COLOR red]Error en la comprobación.[/B][/COLOR]', '[COLOR yellowgreen][B]¿ Desea comprobar el Servidor de nuevo ?[/B][/COLOR]'):
                 try: txt = tester.test_server(dict_server['name'])
                 except:
-                     platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B]' + dict_server['name'] + '[/B][/COLOR]', '[B][COLOR %s]Error comprobación, Servidor ignorado[/B][/COLOR]' % color_alert)
+                     tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B]' + dict_server['name'] + '[/B][/COLOR]', '[B][COLOR %s]Error comprobación, Servidor ignorado[/B][/COLOR]' % color_alert)
                      tests_all_srvs.append(dict_server['name'])
                      continue
             else:
@@ -1885,18 +1885,18 @@ def test_all_srvs(item):
 
     if i > 0:
         if not tests_all_srvs:
-            platformtools.dialog_ok(config.__addon_name, 'Servidores Testeados ' + str(i))
+            tools.dialog_ok(config.__addon_name, 'Servidores Testeados ' + str(i))
         else:
             if not config.get_setting('developer_mode', default=False):
-                platformtools.dialog_ok(config.__addon_name, 'Servidores Testeados ' + str(i))
+                tools.dialog_ok(config.__addon_name, 'Servidores Testeados ' + str(i))
             else:
-                if platformtools.dialog_yesno(config.__addon_name, 'Servidores Testeados ' + str(i), '[B][COLOR red]Hay Conflictos. [COLOR yellow]Desea Verlos ?[/B][/COLOR]'):
+                if tools.dialog_yesno(config.__addon_name, 'Servidores Testeados ' + str(i), '[B][COLOR red]Hay Conflictos. [COLOR yellow]Desea Verlos ?[/B][/COLOR]'):
                     txt_conflict = ''
 
                     for conflict in tests_all_srvs:
                         txt_conflict += conflict + '[CR]'
 
-                    platformtools.dialog_textviewer('Servidores con Conflictos', txt_conflict)
+                    tools.dialog_textviewer('Servidores con Conflictos', txt_conflict)
 
     config.set_setting('developer_test_servers', '')
 
@@ -1911,7 +1911,7 @@ def test_one_server(item):
     try:
         filters.show_servers_list(item)
     except:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR red]Error comprobación, Reintentelo de Nuevo[/B][/COLOR]')
+        tools.dialog_notification(config.__addon_name, '[B][COLOR red]Error comprobación, Reintentelo de Nuevo[/B][/COLOR]')
 
 
 def show_addons(item):
@@ -1934,7 +1934,7 @@ def show_addons(item):
     titulo = 'Información Add-ons '
     if item.tipo == 'Caché': titulo = 'Información Archivos '
 
-    platformtools.dialog_textviewer(titulo + item.tipo , txt)
+    tools.dialog_textviewer(titulo + item.tipo , txt)
 
 
 def show_help_addons(item):
@@ -2003,7 +2003,7 @@ def show_help_addons(item):
 
     txt += ' - [COLOR gold][B]Repository ElementumOrg[/B][/COLOR]' + '[COLOR yellowgreen][B] ' + tex_rp + '[/B][/COLOR][CR]'
 
-    platformtools.dialog_textviewer('Información Add-Ons Extternos', txt)
+    tools.dialog_textviewer('Información Add-Ons Extternos', txt)
 
 
 def show_sistema(item):
@@ -2080,7 +2080,7 @@ def show_sistema(item):
 
     txt += '[COLOR yellow][B] - Nivel de información del fichero [COLOR aqua][B]LOG[/B][/COLOR] (por defecto Error): [COLOR cyan][B]' + tex_niv + ' [/B][/COLOR][CR]'
 
-    platformtools.dialog_textviewer('Información Ajustes del Sistema', txt)
+    tools.dialog_textviewer('Información Ajustes del Sistema', txt)
 
 
 def balandro_log(item):
@@ -2092,10 +2092,10 @@ def balandro_log(item):
 
     loglevel = config.get_setting('debug', 0)
     if not loglevel >= 2:
-        if not platformtools.dialog_yesno(config.__addon_name, 'El nivel actual de información del fichero LOG de su Media Center NO esta Ajustado al máximo. ¿ Desea no obstante visualizarlo ?'): 
+        if not tools.dialog_yesno(config.__addon_name, 'El nivel actual de información del fichero LOG de su Media Center NO esta Ajustado al máximo. ¿ Desea no obstante visualizarlo ?'): 
             return
 
-    if platformtools.dialog_yesno(config.__addon_name, '[COLOR cyan][B]¿ Desea localizar los [COLOR red]Errores[COLOR cyan] de ejecución ?[/B][/COLOR]'): 
+    if tools.dialog_yesno(config.__addon_name, '[COLOR cyan][B]¿ Desea localizar los [COLOR red]Errores[COLOR cyan] de ejecución ?[/B][/COLOR]'): 
         errors = True
 
     path = translatePath(os.path.join('special://logpath/', ''))
@@ -2115,12 +2115,12 @@ def balandro_log(item):
                 break
 
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se localiza su fichero Log[/COLOR][/B]' % color_alert)
-        platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]Media Center NO Oficial[/B][/COLOR]', '[COLOR red][B]No se ha localizado su fichero Log[/B][/COLOR]', '[COLOR yellowgreen][B]Localize su fichero Log, mediante un navegador de archivos en su Media Center.[/B][/COLOR]')
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se localiza su fichero Log[/COLOR][/B]' % color_alert)
+        tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]Media Center NO Oficial[/B][/COLOR]', '[COLOR red][B]No se ha localizado su fichero Log[/B][/COLOR]', '[COLOR yellowgreen][B]Localize su fichero Log, mediante un navegador de archivos en su Media Center.[/B][/COLOR]')
         return
 
     size = filetools.getsize(file)
-    if size > 999999: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Cargando fichero log[/COLOR][/B]' % color_infor)
+    if size > 999999: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Cargando fichero log[/COLOR][/B]' % color_infor)
 
     txt = ''
 
@@ -2151,18 +2151,18 @@ def balandro_log(item):
 
     if errors:
        if not txt_errors:
-           platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Fichero Log Sin Errores[/COLOR][/B]' % color_exec)
+           tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Fichero Log Sin Errores[/COLOR][/B]' % color_exec)
            return
 
        txt = txt_errors
 
-    if txt: platformtools.dialog_textviewer('Fichero LOG (ejecución Balandro) de su Media Center', txt)
+    if txt: tools.dialog_textviewer('Fichero LOG (ejecución Balandro) de su Media Center', txt)
 
 
 def resumen_canales(item):
     logger.info()
 
-    from core import channeltools
+    from dox import channeltools
 
     total = 0
 
@@ -2456,7 +2456,7 @@ def resumen_canales(item):
     txt += '     ' + str(bus_doramas) + ' [COLOR firebrick]Temática Dorama[/COLOR][CR]'
     txt += '     ' + str(bus_animes) + ' [COLOR springgreen]Temática Anime[/COLOR][CR]'
 
-    platformtools.dialog_textviewer('Resúmenes de Canales y su Distribución', txt)
+    tools.dialog_textviewer('Resúmenes de Canales y su Distribución', txt)
 
 
 def resumen_incidencias(item):
@@ -2474,10 +2474,10 @@ def resumen_incidencias(item):
                if '[COLOR moccasin]' in match: txt += '[B' + match + '/I][/B][/COLOR][CR]'
 
     if not txt:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No Hay Incidencias[/COLOR][/B]' % color_exec)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No Hay Incidencias[/COLOR][/B]' % color_exec)
         return
 
-    platformtools.dialog_textviewer('Canales Con Incidencias', txt)
+    tools.dialog_textviewer('Canales Con Incidencias', txt)
 
 
 def resumen_no_accesibles(item):
@@ -2495,16 +2495,16 @@ def resumen_no_accesibles(item):
                 if '[COLOR moccasin]' in match: txt += '[B' + match + '/I][/B][/COLOR][CR]'
 
     if not txt:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No Hay No Accesibles[/COLOR][/B]' % color_exec)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No Hay No Accesibles[/COLOR][/B]' % color_exec)
         return
 
-    platformtools.dialog_textviewer('Canales No Accesibles', txt)
+    tools.dialog_textviewer('Canales No Accesibles', txt)
 
 
 def resumen_servidores(item):
     logger.info()
 
-    from core import jsontools
+    from dox import jsontools
 
     total = 0
     inactives = 0
@@ -2589,7 +2589,7 @@ def resumen_servidores(item):
 
                 txt += '           [COLOR tan]Con Incidencias[/COLOR][B] ' + str(status) + '[/B][CR]'
 
-    platformtools.dialog_textviewer('Resúmenes Servidores y su Distribución', txt)
+    tools.dialog_textviewer('Resúmenes Servidores y su Distribución', txt)
 
 
 def resumen_pending(item):
@@ -2607,10 +2607,10 @@ def resumen_pending(item):
                 if '[COLOR orchid]' in match: txt += '[B' + match + '/I][/B][/COLOR][CR]'
 
     if not txt:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No Hay con Incidencias[/COLOR][/B]' % color_exec)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No Hay con Incidencias[/COLOR][/B]' % color_exec)
         return
 
-    platformtools.dialog_textviewer('Servidores con Incidencias', txt)
+    tools.dialog_textviewer('Servidores con Incidencias', txt)
 
 
 def show_help_alternativas(item):
@@ -2662,7 +2662,7 @@ def show_help_alternativas(item):
 
     txt += '    [COLOR yellow]Youtube[/COLOR][CR]'
 
-    platformtools.dialog_textviewer('Servidores Vías Alternativas', txt)
+    tools.dialog_textviewer('Servidores Vías Alternativas', txt)
 
 
 def show_help_adicionales(item):
@@ -2776,4 +2776,4 @@ def show_help_adicionales(item):
     txt += '   [COLOR yellow]Worlduploads[/COLOR][CR]'
     txt += '   [COLOR yellow]Ztreamhub[/COLOR][CR]'
 
-    platformtools.dialog_textviewer('Servidores Vías Adicionales', txt)
+    tools.dialog_textviewer('Servidores Vías Adicionales', txt)

@@ -2,8 +2,8 @@
 
 import os
 
-from platformcode import logger, config, platformtools
-from core import filetools, scrapertools
+from configuraciones import logger, config, tools
+from dox import filetools, scrapertools
 
 
 color_list_proxies = config.get_setting('channels_list_proxies_color', default='red')
@@ -467,8 +467,8 @@ def show_infos_proxies(item):
 
 
 def _refresh_menu(item):
-    platformtools.dialog_notification(config.__addon_name, 'Refrescando [B][COLOR %s]caché Menú[/COLOR][/B]' % color_exec)
-    platformtools.itemlist_refresh()
+    tools.dialog_notification(config.__addon_name, 'Refrescando [B][COLOR %s]caché Menú[/COLOR][/B]' % color_exec)
+    tools.itemlist_refresh()
 
 
 def _marcar_canal(item):
@@ -478,14 +478,14 @@ def _marcar_canal(item):
 
 
 def _poner_no_searchable(item):
-    platformtools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR violet]Excluyendo de búsquedas[/COLOR][/B]')
+    tools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR violet]Excluyendo de búsquedas[/COLOR][/B]')
 
     config.set_setting('no_searchable', True, item.from_channel)
 
     if not item.module_search: _refresh_menu(item)
 
 def _quitar_no_searchable(item):
-    platformtools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR violet]Incluyendo en búsquedas[/COLOR][/B]')
+    tools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR violet]Incluyendo en búsquedas[/COLOR][/B]')
 
     config.set_setting('no_searchable', False, item.from_channel)
 
@@ -730,7 +730,7 @@ def _dominio_memorizado(item):
     elif item.from_channel == 'veronline': domains.manto_domain_veronline(item)
 
     else:
-        platformtools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR %s]Ajuste No Permitido[/B][/COLOR]' % color_alert)
+        tools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR %s]Ajuste No Permitido[/B][/COLOR]' % color_alert)
 
 
 def _credenciales(item):
@@ -739,13 +739,13 @@ def _credenciales(item):
     elif item.from_channel == 'playdede': _credenciales_playdede(item)
 
     else:
-        platformtools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR %s]Falta _Credenciales[/B][/COLOR]' % color_alert)
+        tools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR %s]Falta _Credenciales[/B][/COLOR]' % color_alert)
 
 
 def _credenciales_hdfull(item):
     logger.info()
 
-    from core import jsontools
+    from dox import jsontools
 
     channel_json = 'hdfull.json'
     filename_json = os.path.join(config.get_runtime_path(), 'channels', channel_json)
@@ -758,14 +758,14 @@ def _credenciales_hdfull(item):
        params = jsontools.load(data)
     except:
        el_canal = ('Falta [B][COLOR %s]' + channel_json) % color_alert
-       platformtools.dialog_notification(config.__addon_name + ' - HdFull', el_canal + '[/COLOR][/B]')
+       tools.dialog_notification(config.__addon_name + ' - HdFull', el_canal + '[/COLOR][/B]')
        return
 
     name = params['name']
 
     if params['active'] == False:
         el_canal = ('[B][COLOR %s] ' + name) % color_avis
-        platformtools.dialog_notification(config.__addon_name, el_canal + '[COLOR %s] inactivo [/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, el_canal + '[COLOR %s] inactivo [/COLOR][/B]' % color_alert)
         return
 
     from channels import hdfull
@@ -776,8 +776,8 @@ def _credenciales_hdfull(item):
 
     result = hdfull.login('')
 
-    if result: platformtools.dialog_notification(config.__addon_name + ' - HdFull', '[COLOR %s][B]Login Correcto [/COLOR][/B]' % color_avis)
-    else: platformtools.dialog_notification(config.__addon_name + ' - HdFull', '[COLOR %s][B]Login Incorrecto [/COLOR][/B]' % color_alert)
+    if result: tools.dialog_notification(config.__addon_name + ' - HdFull', '[COLOR %s][B]Login Correcto [/COLOR][/B]' % color_avis)
+    else: tools.dialog_notification(config.__addon_name + ' - HdFull', '[COLOR %s][B]Login Incorrecto [/COLOR][/B]' % color_alert)
 
     _refresh_menu(item)
 
@@ -785,7 +785,7 @@ def _credenciales_hdfull(item):
 def _credenciales_playdede(item):
     logger.info()
 
-    from core import jsontools
+    from dox import jsontools
 
     channel_json = 'playdede.json'
     filename_json = os.path.join(config.get_runtime_path(), 'channels', channel_json)
@@ -798,14 +798,14 @@ def _credenciales_playdede(item):
        params = jsontools.load(data)
     except:
        el_canal = ('Falta [B][COLOR %s]' + channel_json) % color_alert
-       platformtools.dialog_notification(config.__addon_name + ' - PlayDede', el_canal + '[/COLOR][/B]')
+       tools.dialog_notification(config.__addon_name + ' - PlayDede', el_canal + '[/COLOR][/B]')
        return
 
     name = params['name']
 
     if params['active'] == False:
         el_canal = ('[B][COLOR %s] ' + name) % color_avis
-        platformtools.dialog_notification(config.__addon_name, el_canal + '[COLOR %s] inactivo [/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, el_canal + '[COLOR %s] inactivo [/COLOR][/B]' % color_alert)
         return
 
     from channels import playdede
@@ -816,8 +816,8 @@ def _credenciales_playdede(item):
 
     result = playdede.login('')
 
-    if result: platformtools.dialog_notification(config.__addon_name + ' - PlayDede', '[COLOR %s][B]Login Correcto [/COLOR][/B]' % color_avis)
-    else: platformtools.dialog_notification(config.__addon_name + ' - PlayDede', '[COLOR %s][B]Login Incorrecto [/COLOR][/B]' % color_alert)
+    if result: tools.dialog_notification(config.__addon_name + ' - PlayDede', '[COLOR %s][B]Login Correcto [/COLOR][/B]' % color_avis)
+    else: tools.dialog_notification(config.__addon_name + ' - PlayDede', '[COLOR %s][B]Login Incorrecto [/COLOR][/B]' % color_alert)
 
     _refresh_menu(item)
 
@@ -1388,7 +1388,7 @@ def _proxies(item):
         if config.get_setting('channel_zonaleros_proxies') is None: refrescar = False
 
     else:
-        platformtools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR %s]Falta _Proxies[/B][/COLOR]' % color_alert)
+        tools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR %s]Falta _Proxies[/B][/COLOR]' % color_alert)
         refrescar = False
 
     channels_unsatisfactory = config.get_setting('developer_test_channels', default='')
@@ -1401,7 +1401,7 @@ def _proxies(item):
 
 def _search_new_proxies(item):
     if item.channels_new_proxies:
-        if platformtools.dialog_yesno(config.__addon_name, '[COLOR yellow][B]Solo se tendrán en cuenta para las próximas búsquedas[/B][/COLOR]','[COLOR red][B]¿ Desea efectuar una nueva búsqueda de proxies en Todos esos canales ?[/B][/COLOR]'):
+        if tools.dialog_yesno(config.__addon_name, '[COLOR yellow][B]Solo se tendrán en cuenta para las próximas búsquedas[/B][/COLOR]','[COLOR red][B]¿ Desea efectuar una nueva búsqueda de proxies en Todos esos canales ?[/B][/COLOR]'):
             for channel in item.channels_new_proxies:
                 item.from_channel = channel
                 item.module_search = True
@@ -1409,7 +1409,7 @@ def _search_new_proxies(item):
 
 
 def _quitar_proxies(item):
-    platformtools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR red]Quitando los proxies[/COLOR][/B]')
+    tools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR red]Quitando los proxies[/COLOR][/B]')
 
     config.set_setting('proxies', '', item.from_channel)
 
@@ -1428,7 +1428,7 @@ def _quitar_proxies(item):
 
 
 def _test_webs(item):
-    platformtools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR violet]Test web canal[/COLOR][/B]')
+    tools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR violet]Test web canal[/COLOR][/B]')
 
     config.set_setting('developer_test_channels', '')
     config.set_setting('developer_test_servers', '')
@@ -1440,4 +1440,4 @@ def _test_webs(item):
     try:
         tester.test_channel(item.from_channel)
     except:
-        platformtools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Reintentelo de Nuevo[/B][/COLOR]' % color_alert)
+        tools.dialog_notification(config.__addon_name + '[B][COLOR yellow] ' + item.from_channel.capitalize() + '[/COLOR][/B]', '[B][COLOR %s]Error comprobación, Reintentelo de Nuevo[/B][/COLOR]' % color_alert)

@@ -8,8 +8,8 @@ else: PY3 = False
 
 import os, re, time, xbmc, xbmcaddon
 
-from platformcode import config, logger, platformtools, updater
-from core import httptools, scrapertools, filetools, jsontools
+from configuraciones import config, logger, tools, updater
+from dox import httptools, scrapertools, filetools, jsontools
 
 
 LINUX = False
@@ -161,7 +161,7 @@ def test_channel(channel_name):
     except:
        if not channel_name == 'test_providers':
            el_canal = ('Falta [B][COLOR %s]' + channel_json) % color_alert
-           platformtools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
+           tools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
            return
 
     if channel_name == 'test_providers':
@@ -170,7 +170,7 @@ def test_channel(channel_name):
     if params['active'] == False:
         el_canal = ('[B][COLOR %s]' + channel_name) % color_avis
         if not 'temporary' in str(params['clusters']):
-            platformtools.dialog_notification(config.__addon_name, el_canal + '[COLOR %s] inactivo [/COLOR][/B]' % color_alert)
+            tools.dialog_notification(config.__addon_name, el_canal + '[COLOR %s] inactivo [/COLOR][/B]' % color_alert)
             return
 
     if config.get_setting('developer_mode', default=False): txt = '[COLOR moccasin][B]Internet:[/COLOR]  [COLOR yellow]Status Developer Mode[/B][/COLOR][CR][CR]'
@@ -763,14 +763,14 @@ def test_channel(channel_name):
           except:
              if not channel_name == 'test_providers':
                  el_canal = ('Falta [B][COLOR %s]' + channel_py) % color_alert
-                 platformtools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
+                 tools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
                  return
 
           if channel_name == 'test_providers': data = ''
 
           if data == False:
              el_canal = ('Falta [B][COLOR %s]' + channel_py) % color_alert
-             platformtools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
+             tools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
              return
 
           if not host:
@@ -848,7 +848,7 @@ def test_channel(channel_name):
 
     if not host or not '//' in host:
         el_canal = ('Falta Dominio/Host/Clon/Método en [B][COLOR %s]' + channel_py) % color_alert
-        platformtools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
+        tools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
         return
 
     txt = info_channel(channel_name, channel_poe, host, dominio, txt, ant_hosts)
@@ -898,7 +898,7 @@ def test_channel(channel_name):
                 if len(incidencia) < 99:
                     avis_causas = avis_causas + ' ' + incidencia
 
-        platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+        tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
         avisado = True
 
     elif 'No Accesible:' in txt:
@@ -912,7 +912,7 @@ def test_channel(channel_name):
                 if len(incidencia) < 99:
                     avis_causas = avis_causas + ' ' + incidencia
 
-        platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+        tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
         avisado = True
 
     elif channel_id in str(channels_despised):
@@ -929,13 +929,13 @@ def test_channel(channel_name):
 
             if not 'code: [COLOR springgreen][B]200' in txt:
                 if not channels_unsatisfactory == 'unsatisfactory':
-                    platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                    tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
                     avisado = True
 
                 else:
                     if 'Podría estar Correcto' in txt: pass
                     else:
-                        platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                        tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
 
                     avisado = True
             else:
@@ -943,12 +943,12 @@ def test_channel(channel_name):
                     if 'invalid:' in txt:
                         if txt_sorry in txt or txt_suspe in txt: avis_causas = '[COLOR goldenrod][B]La Cuenta está Suspendida.[/B][/COLOR]'
 
-                        platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                        tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
                         avisado = True
 
                     elif 'Se pueden Eliminar los Proxies' in txt:
                         avis_causas = txt_erase
-                        platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                        tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
                         avisado = True
 
     else:
@@ -958,18 +958,18 @@ def test_channel(channel_name):
            if not channels_unsatisfactory == 'unsatisfactory':
                if txt_verif in txt:
                    avis_causas = txt_verif
-                   platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                   tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
                    avisado = True
                else:
                    if txt_sorry in txt or txt_suspe in txt: avis_causas = '[COLOR goldenrod][B]La Cuenta está Suspendida.[/B][/COLOR]'
 
-                   platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                   tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
                    avisado = True
 
            else:
                if 'Podría estar Correcto' in txt: pass
                else:
-                   platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                   tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
 
                avisado = True
        else:
@@ -977,40 +977,40 @@ def test_channel(channel_name):
                if 'invalid:' in txt:
                    if txt_sorry in txt or txt_suspe in txt or txt_reach in txt: avis_causas = '[COLOR goldenrod][B]La Cuenta está Suspendida.[/B][/COLOR]'
 
-                   platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                   tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
                    avisado = True
 
                elif 'Se pueden Eliminar los Proxies' in txt:
                    avis_causas = txt_erase
-                   platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                   tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
                    avisado = True
 
                elif 'Falso Positivo.' in txt:
                    avis_causas = txt_false
 
                    if txt_sorry in txt or txt_suspe in txt or txt_reach in txt: avis_causas = '[COLOR goldenrod][B]La Cuenta está Suspendida.[/B][/COLOR]'
-                   platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                   tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
                    avisado = True
 
                elif 'Dominio Expirado' in txt:
                    avis_causas = txt_false
 
                    avis_causas = '[COLOR goldenrod][B]El Dominio de la Web está Expirado.[/B][/COLOR]'
-                   platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                   tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
                    avisado = True
 
                elif 'Inaccesible' in txt:
                    avis_causas = txt_false
 
                    avis_causas = '[COLOR goldenrod][B]No se puede acceder a este sitio web.[/B][/COLOR]'
-                   platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                   tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
                    avisado = True
 
                elif 'Sin Información de Datos' in txt:
                    avis_causas = txt_false
 
                    avis_causas = '[COLOR goldenrod][B]Sin Información de Datos.[/B][/COLOR]'
-                   platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
+                   tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Canal NO ha resultado Satisfactorio.[/I][/B][/COLOR]', avis_causas, '[COLOR cyan][B]Por favor, compruebe la información del Test del Canal.[/B][/COLOR]')
                    avisado = True
 
     txt = txt.replace('[CR][CR][CR]', '[CR][CR]')
@@ -1030,15 +1030,15 @@ def test_channel(channel_name):
 
             elif 'Podría estar Correcto' in txt: return ''
             else:
-                platformtools.dialog_textviewer(channel_name.upper(), txt)
+                tools.dialog_textviewer(channel_name.upper(), txt)
                 return txt
 
-    platformtools.dialog_textviewer(channel_name.upper(), txt)
+    tools.dialog_textviewer(channel_name.upper(), txt)
 
 
 def info_channel(channel_name, channel_poe, host, dominio, txt, ant_hosts):
     el_canal = ('Accediendo [B][COLOR %s]' + channel_name) % color_avis
-    platformtools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
+    tools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
 
     channel_id = channel_name.lower()
 
@@ -1059,7 +1059,7 @@ def info_channel(channel_name, channel_poe, host, dominio, txt, ant_hosts):
                                if not 'timed out' in txt:
                                    if not 'getaddrinfo failed' in txt:
                                        if not 'Denegado' in txt:
-                                           platformtools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B][COLOR cyan] Redirect[/COLOR]')
+                                           tools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B][COLOR cyan] Redirect[/COLOR]')
                                            response, txt = acces_channel(channel_name, host, '', dominio, txt, ant_hosts, follow_redirects=True)
 
     if not dominio:
@@ -1071,7 +1071,7 @@ def info_channel(channel_name, channel_poe, host, dominio, txt, ant_hosts):
 
 def acces_channel(channel_name, host, txt_dominio, dominio, txt, ant_hosts, follow_redirects=None):
     el_canal = ('[COLOR mediumaquamarine]Testeando [B][COLOR %s]' + channel_name) % color_infor
-    platformtools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
+    tools.dialog_notification(config.__addon_name, el_canal + '[/COLOR][/B]')
 
     channel_id = channel_name.lower()
 
@@ -1092,7 +1092,7 @@ def acces_channel(channel_name, host, txt_dominio, dominio, txt, ant_hosts, foll
         response = httptools.downloadpage(host_acces, headers=headers, follow_redirects=follow_redirects, raise_weberror=False, bypass_cloudflare=False)
 
         if 'Checking if the site connection is secure' in response.data:
-            platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR cyan][B]Requiere esperar %s segundos[/B][/COLOR]' % espera)
+            tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR cyan][B]Requiere esperar %s segundos[/B][/COLOR]' % espera)
             time.sleep(int(espera))
 
             response = httptools.downloadpage(host_acces, headers=headers, follow_redirects=follow_redirects, timeout=timeout, raise_weberror=False, bypass_cloudflare=False)
@@ -1108,7 +1108,7 @@ def acces_channel(channel_name, host, txt_dominio, dominio, txt, ant_hosts, foll
                     pass
 
         if not response.data:
-            if config.get_setting('channels_re_charges', default=True): platformtools.dialog_notification(channel_name.capitalize(), '[COLOR cyan]Re-Intentanto acceso[/COLOR]')
+            if config.get_setting('channels_re_charges', default=True): tools.dialog_notification(channel_name.capitalize(), '[COLOR cyan]Re-Intentanto acceso[/COLOR]')
 
             timeout = config.get_setting('channels_repeat', default=30)
 
@@ -1119,7 +1119,7 @@ def acces_channel(channel_name, host, txt_dominio, dominio, txt, ant_hosts, foll
         if response.sucess == True: quitar_proxies = True
 
         if 'Checking if the site connection is secure' in response.data:
-            platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR cyan][B]Requiere esperar %s segundos[/B][/COLOR]' % espera)
+            tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR cyan][B]Requiere esperar %s segundos[/B][/COLOR]' % espera)
             time.sleep(int(espera))
 
             response = httptools.downloadpage(host_acces, headers=headers, follow_redirects=follow_redirects, timeout=timeout, raise_weberror=False, bypass_cloudflare=False)
@@ -1132,16 +1132,16 @@ def acces_channel(channel_name, host, txt_dominio, dominio, txt, ant_hosts, foll
             if ';' in proxies: proxies = proxies.replace(',', ';').split(';')
             else: proxies = proxies.split(',')
 
-            platformtools.dialog_notification(config.__addon_name + '[COLOR red][B] con proxies[/B][/COLOR]', el_canal + '[/COLOR][/B]')
+            tools.dialog_notification(config.__addon_name + '[COLOR red][B] con proxies[/B][/COLOR]', el_canal + '[/COLOR][/B]')
 
             if len(proxies) > 1:
-                platformtools.dialog_notification(el_canal + '[/COLOR][/B]', '[COLOR orangered]Test con [B]' + str(len(proxies)) + '[/B] proxies ...[/COLOR]')
+                tools.dialog_notification(el_canal + '[/COLOR][/B]', '[COLOR orangered]Test con [B]' + str(len(proxies)) + '[/B] proxies ...[/COLOR]')
                 time.sleep(1)
 
         response = httptools.downloadpage_proxy(channel_id, host_acces, headers=headers, follow_redirects=follow_redirects, raise_weberror=False, bypass_cloudflare=False)
 
         if 'Checking if the site connection is secure' in response.data:
-            platformtools.dialog_notification(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR cyan][B]Requiere esperar %s segundos[/B][/COLOR]' % espera)
+            tools.dialog_notification(config.__addon_name + ' [COLOR yellow][B]' + channel_name.capitalize() + '[/B][/COLOR]', '[COLOR cyan][B]Requiere esperar %s segundos[/B][/COLOR]' % espera)
             time.sleep(int(espera))
 
             response = httptools.downloadpage_proxy(channel_id, host_acces, headers=headers, follow_redirects=follow_redirects, timeout=timeout, raise_weberror=False, bypass_cloudflare=False)
@@ -1157,7 +1157,7 @@ def acces_channel(channel_name, host, txt_dominio, dominio, txt, ant_hosts, foll
                     pass
 
         if not response.data:
-            if config.get_setting('channels_re_charges', default=True): platformtools.dialog_notification(channel_name.capitalize(), '[COLOR cyan]Re-Intentanto acceso[/COLOR]')
+            if config.get_setting('channels_re_charges', default=True): tools.dialog_notification(channel_name.capitalize(), '[COLOR cyan]Re-Intentanto acceso[/COLOR]')
 
             timeout = config.get_setting('channels_repeat', default=30)
 
@@ -1766,18 +1766,18 @@ def test_server(server_name):
        dict_server = jsontools.load(data)
     except:
        el_server = ('Falta [B][COLOR %s]' + server_json) % color_alert
-       platformtools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B]')
+       tools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B]')
        return
 
     if dict_server['active'] == False:
         el_server = ('[B][COLOR %s]' + server_name) % color_avis
-        platformtools.dialog_notification(config.__addon_name, el_server + '[COLOR %s] inactivo [/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, el_server + '[COLOR %s] inactivo [/COLOR][/B]' % color_alert)
         return
 
     if 'find_videos' in dict_server: dict_server['find_videos']['patterns'] = dict_server['find_videos'].get('patterns', list())
     else:
         el_server = ('[B][COLOR %s]' + server_name) % color_avis
-        platformtools.dialog_notification(config.__addon_name, el_server + 'Falta [COLOR %s] find_videos [/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, el_server + 'Falta [COLOR %s] find_videos [/COLOR][/B]' % color_alert)
         return
 
     if config.get_setting('developer_mode', default=False):
@@ -1807,7 +1807,7 @@ def test_server(server_name):
 
     if not servers:
         el_server = ('Falta url [B][COLOR %s]' + server_name) % color_alert
-        platformtools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B]')
+        tools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B]')
         return
 
     url_servidor = ''
@@ -1905,7 +1905,7 @@ def test_server(server_name):
     elif server_id in str(servers_poe): pass
     else:
        if not 'code: [COLOR springgreen][B]200' in txt:
-           platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + server_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Servidor NO ha resultado Satisfactorio.[/I][/B][/COLOR]', '[COLOR cyan][B]Por favor, compruebe la información del Test del Servidor.[/B][/COLOR]')
+           tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]' + server_name.capitalize() + '[/B][/COLOR]', '[COLOR red][B][I]El test del Servidor NO ha resultado Satisfactorio.[/I][/B][/COLOR]', '[COLOR cyan][B]Por favor, compruebe la información del Test del Servidor.[/B][/COLOR]')
            avisado = True
 
     txt = txt.replace('[CR][CR][CR]', '[CR][CR]')
@@ -1913,15 +1913,15 @@ def test_server(server_name):
     if servers_unsatisfactory == 'unsatisfactory':
         if not avisado: return ''
         else:
-           platformtools.dialog_textviewer(server_name.upper(), txt)
+           tools.dialog_textviewer(server_name.upper(), txt)
            return txt
 
-    platformtools.dialog_textviewer(server_name.upper(), txt)
+    tools.dialog_textviewer(server_name.upper(), txt)
 
 
 def info_server(server_name, server_poe, url, txt):
     el_server = ('Accediendo [B][COLOR %s]' + server_name) % color_infor
-    platformtools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B]')
+    tools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B]')
 
     server_id = server_name.lower()
 
@@ -1940,7 +1940,7 @@ def info_server(server_name, server_poe, url, txt):
                            if not 'timed out' in txt:
                                if not 'getaddrinfo failed' in txt:
                                    if not 'Denegado' in txt:
-                                       platformtools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B][COLOR cyan] Redirect[/COLOR]')
+                                       tools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B][COLOR cyan] Redirect[/COLOR]')
                                        response, txt = acces_server(server_name, url, txt, follow_redirects=True)
 
     return txt
@@ -1948,7 +1948,7 @@ def info_server(server_name, server_poe, url, txt):
 
 def acces_server(server_name, url, txt, follow_redirects=None):
     el_server = ('[COLOR mediumaquamarine]Testeando [B][COLOR %s]' + server_name) % color_avis
-    platformtools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B]')
+    tools.dialog_notification(config.__addon_name, el_server + '[/COLOR][/B]')
 
     server_id = server_name.lower()
 
@@ -2115,7 +2115,7 @@ def acces_server(server_name, url, txt, follow_redirects=None):
 
 
 def test_internet():
-    platformtools.dialog_notification(config.__addon_name, 'Comprobando [B][COLOR %s]Internet[/COLOR][/B]' % color_avis)
+    tools.dialog_notification(config.__addon_name, 'Comprobando [B][COLOR %s]Internet[/COLOR][/B]' % color_avis)
 
     your_ip = ''
 
