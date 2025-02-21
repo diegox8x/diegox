@@ -10,10 +10,10 @@ import os
 
 from datetime import datetime
 
-from platformcode import config, logger, platformtools, updater
-from core.item import Item
+from configuraciones import config, logger, tools, updater
+from dox.item import Item
 
-from core import channeltools, scrapertools
+from dox import channeltools, scrapertools
 
 
 color_list_prefe = config.get_setting('channels_list_prefe_color', default='gold')
@@ -571,7 +571,7 @@ def mainlist(item):
         if config.get_setting('developer_mode', default=False): text_dev = ' [COLOR darkorange][B]Desarrollo[/B][/COLOR]'
 
         if not os.path.exists(os.path.join(config.get_runtime_path(), 'modules', 'developergenres.py')):
-            platformtools.dialog_notification(config.__addon_name + text_dev, '[COLOR yellow][B]Versión Desfasada del Add-On[/COLOR][/B]')
+            tools.dialog_notification(config.__addon_name + text_dev, '[COLOR yellow][B]Versión Desfasada del Add-On[/COLOR][/B]')
     else: last_ver = ''
 
     context_ayuda = []

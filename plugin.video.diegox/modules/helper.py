@@ -20,15 +20,15 @@ import xbmc, xbmcgui, platform
 
 from datetime import datetime
 
-from platformcode import config, logger, platformtools, updater
-from core.item import Item
-from core import channeltools, filetools, servertools, httptools, scrapertools, trackingtools
+from configuraciones import config, logger, tools, updater
+from dox.item import Item
+from dox import channeltools, filetools, servertools, httptools, scrapertools, trackingtools
 
 from modules import filters
 
 
-ADDON_REPO_ADDONS = 'https://repobal.github.io/base/'
-ADDON_UPDATES_JSON = 'https://raw.githubusercontent.com/repobal/fix/main/updates.json'
+ADDON_REPO_ADDONS = 'https://diegox8x.github.io/diegox/'
+ADDON_UPDATES_JSON = 'https://raw.githubusercontent.com/diegox8x/fix/main/updates.json'
 
 
 color_list_prefe = config.get_setting('channels_list_prefe_color', default='gold')
@@ -45,8 +45,8 @@ descartar_xxx = config.get_setting('descartar_xxx', default=False)
 descartar_anime = config.get_setting('descartar_anime', default=False)
 
 _foro = "[COLOR plum][B][I] www.mimediacenter.info/foro/ [/I][/B][/COLOR]"
-_source = "[COLOR coral][B][I] https://repobal.github.io/base/ [/I][/B][/COLOR]"
-_scripts = "[COLOR mediumaquamarine][B][I] https://repobal.github.io/base/scripts/ [/I][/B][/COLOR]"
+_source = "[COLOR coral][B][I] https://diegox8x.github.io/diegox/ [/I][/B][/COLOR]"
+_scripts = "[COLOR mediumaquamarine][B][I] https://diegox8x.github.io/diegox/scripts/ [/I][/B][/COLOR]"
 _telegram = "[COLOR lightblue][B][I] t.me/balandro_asesor [/I][/B][/COLOR]"
 
 _team = "[COLOR hotpink][B][I] t.me/Balandro_team [/I][/B][/COLOR]"
@@ -923,7 +923,7 @@ def show_help_bloqueos(item):
     txt += '  - y/ó si el Canal dispone de la opción [COLOR red][B]Configurar proxies a usar[/B][/COLOR][CR]'
     txt += '    quizás necesitará obligatoriamente también usar [COLOR red][B]Proxies[/B][/COLOR]'
 
-    platformtools.dialog_textviewer('Qué hacer si su Operadora Bloquea algún Canal', txt)
+    tools.dialog_textviewer('Qué hacer si su Operadora Bloquea algún Canal', txt)
 
 
 def submnu_avisinfo_channels(item):
@@ -1413,7 +1413,7 @@ def submnu_preferidos(item):
 
     existe = filetools.exists(path)
     if not existe:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún no tiene Preferidos[/COLOR][/B]' % color_exec)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún no tiene Preferidos[/COLOR][/B]' % color_exec)
 
     itemlist.append(item.clone( action='', title='[B]PREFERIDOS:[/B]', folder=False, text_color='wheat' ))
 
@@ -1456,7 +1456,7 @@ def submnu_descargas(item):
 
     existe = filetools.exists(path)
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún no tiene Descargas[/COLOR][/B]' % color_exec)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún no tiene Descargas[/COLOR][/B]' % color_exec)
 
     itemlist.append(item.clone( action='', title='[B]DESCARGAS:[/B]', folder=False, text_color='seagreen' ))
 
@@ -2030,31 +2030,31 @@ def show_help_miscelanea(item):
     txt += '  A los creadores de Elementum,  InputStream adaptive,[CR]'
     txt += '  ResolveUrl  y  YouTube Plugin[CR]'
 
-    platformtools.dialog_textviewer('Información Miscelánea', txt)
+    tools.dialog_textviewer('Información Miscelánea', txt)
 
 
 def show_pin_parental(item):
     logger.info()
 
     if not config.get_setting('adults_password'):
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún no tiene Pin parental[/COLOR][/B]' % color_exec)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún no tiene Pin parental[/COLOR][/B]' % color_exec)
         return
 
-    if not platformtools.dialog_yesno(config.__addon_name + ' PIN Parental', '[COLOR cyan][B]Si olvidó el Pin Parental, para poder verlo, necesitará un código de autorizacion y deberá solicitarlo en [/B][/COLOR]' + _telegram + ' [COLOR yellow][B]¿ Tiene el Código ?[/B][/COLOR]'): 
+    if not tools.dialog_yesno(config.__addon_name + ' PIN Parental', '[COLOR cyan][B]Si olvidó el Pin Parental, para poder verlo, necesitará un código de autorizacion y deberá solicitarlo en [/B][/COLOR]' + _telegram + ' [COLOR yellow][B]¿ Tiene el Código ?[/B][/COLOR]'): 
         return
 
-    auth_pin = platformtools.dialog_input('', 'Código Autorización Pin')
+    auth_pin = tools.dialog_input('', 'Código Autorización Pin')
     if not auth_pin: return
 
     auth_pin = auth_pin.upper().strip()
 
     if not auth_pin == 'PINBAL':
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Código Autorización incorrecto[/COLOR][/B]' % color_avis)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Código Autorización incorrecto[/COLOR][/B]' % color_avis)
         return
 
     txt = '[COLOR goldenrod][B]PIN:  [COLOR yellow]' + str(config.get_setting('adults_password')) + '[/B][/COLOR][CR]'
 
-    platformtools.dialog_textviewer('Información PIN Parental', txt)
+    tools.dialog_textviewer('Información PIN Parental', txt)
 
 
 def show_help_bucle(item):
@@ -2077,7 +2077,7 @@ def show_help_bucle(item):
 
     txt += '[CR][CR][COLOR magenta][B]Si el problema aún persistiera, recomendamos [COLOR yellow]Desactivar ó Eliminar[/COLOR][COLOR magenta] esos Add-Ons de [/COLOR][COLOR gold]Limpieza[/B][/COLOR].'
 
-    platformtools.dialog_textviewer('Información Si las Búsquedas hacen Bucle (solicitan de nuevo el texto a localizar)', txt)
+    tools.dialog_textviewer('Información Si las Búsquedas hacen Bucle (solicitan de nuevo el texto a localizar)', txt)
 
 
 def show_help_register(item):
@@ -2148,7 +2148,7 @@ def show_help_register(item):
         if item.channel_id == 'hdfull': txt_channel = 'Información para Registrarse en HdFull'
         elif item.channel_id == 'playdede': txt_channel = 'Información para Registrarse en PlayDede'
 
-    platformtools.dialog_textviewer(txt_channel, txt)
+    tools.dialog_textviewer(txt_channel, txt)
 
 
 def show_help_animejl(item):
@@ -2310,7 +2310,7 @@ def show_help_canales(item):
     if item.notice:
         datos = channeltools.get_channel_parameters(item.notice)
         if not datos['active']:
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]El canal está Inactivo[/B][/COLOR]' % color_avis)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]El canal está Inactivo[/B][/COLOR]' % color_avis)
             return
 
     txt = ''
@@ -2383,7 +2383,7 @@ def show_help_canales(item):
     if config.get_setting('proxies_vias', default=False):
         txt += '[COLOR violet][B]  Openproxy,  Github[/B][/COLOR] Proveedores Lista Vias Alternativas[CR]'
 
-    platformtools.dialog_textviewer('Información canal ' + item.notice.capitalize(), txt)
+    tools.dialog_textviewer('Información canal ' + item.notice.capitalize(), txt)
 
 
 def show_help_playdede_media_center(item):
@@ -2409,7 +2409,7 @@ def show_help_playdede_media_center(item):
     txt += 'Entendemos que esto pueda causar inconvenientes, pero es necesario[CR]'
     txt += 'si queremos permanecer activos durante más tiempo.[/B][/COLOR]'
 
-    platformtools.dialog_textviewer('Información PlayDede Aviso Ubicación de su Media Center', txt)
+    tools.dialog_textviewer('Información PlayDede Aviso Ubicación de su Media Center', txt)
 
 
 def show_help_playdede_bloqueo(item):
@@ -2432,7 +2432,7 @@ def show_help_playdede_bloqueo(item):
 
     txt += '[COLOR gold][B]  y solo cambiará el Número despues de[/COLOR][COLOR yellowgreen] www?[/B][/COLOR]'
 
-    platformtools.dialog_textviewer('PlayDede Información Bloqueo Operadoras', txt)
+    tools.dialog_textviewer('PlayDede Información Bloqueo Operadoras', txt)
 
 
 def show_help_audios(item):
@@ -2446,14 +2446,14 @@ def show_help_audios(item):
 
     txt += '[CR][CR]*) Revise sus [COLOR chocolate][B]Ajustes[/B][/COLOR] preferencias (categoría [COLOR fuchsia][B]Play[/B][/COLOR])'
 
-    platformtools.dialog_textviewer('Información Idiomas en los Audios de los Vídeos', txt)
+    tools.dialog_textviewer('Información Idiomas en los Audios de los Vídeos', txt)
 
 
 def show_help_gamovideo(item):
     logger.info()
 
     if not servertools.is_server_available('gamovideo'):
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]El servidor está Inactivo[/B][/COLOR]' % color_avis)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]El servidor está Inactivo[/B][/COLOR]' % color_avis)
         return
 
     txt = '*) Consideraciones si [COLOR gold][B]Jamás[/COLOR][/B] reproduce este servidor en ningún Canal.[CR]'
@@ -2468,7 +2468,7 @@ def show_help_gamovideo(item):
 
     txt += '     Si Alteran el fichero [COLOR gold]AdvancedSettings[/COLOR] con sentencias relativas a la memoria de su Media Center.'
 
-    platformtools.dialog_textviewer('Información servidor Gamovideo', txt)
+    tools.dialog_textviewer('Información servidor Gamovideo', txt)
 
 
 def show_help_not_programed(item):
@@ -2492,28 +2492,28 @@ def show_help_not_programed(item):
 
     txt += '[CR][CR]*) [COLOR yellowgreen][B]Dada su dificultad ese Reproductor No esta programado.[/COLOR][/B]'
 
-    platformtools.dialog_textviewer('Información Sin Enlaces Soportados', txt)
+    tools.dialog_textviewer('Información Sin Enlaces Soportados', txt)
 
 
 def show_help_mega(item):
     logger.info()
 
     if not servertools.is_server_available('mega'):
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]El servidor está Inactivo[/B][/COLOR]' % color_avis)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]El servidor está Inactivo[/B][/COLOR]' % color_avis)
         return
 
     txt = '*) Si su Media Center es una versión anterior a [COLOR gold][B]19.x[/COLOR][/B] y opera bajo el sistema operativo [COLOR gold][B]Windows[/COLOR][/B], en determinadas ocasiones, puede fallar la Reproducción.[CR][CR]'
 
     txt += '*) Para cualquier plataforma de ejecución [COLOR gold][B](Windows, Android, Rasperri, etc.)[/COLOR][/B] deben existir Obligatoriamente los modulos necesarios de [COLOR yellow][B]Cryptografía[/COLOR][/B] ya integrados en su Equipo, si no existieran, puede fallar la Reproducción.'
 
-    platformtools.dialog_textviewer('Información servidor Mega', txt)
+    tools.dialog_textviewer('Información servidor Mega', txt)
 
 
 def show_help_uptobox(item):
     logger.info()
 
     if not servertools.is_server_available('uptobox'):
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]El servidor está Inactivo[/B][/COLOR]' % color_avis)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]El servidor está Inactivo[/B][/COLOR]' % color_avis)
         return
 
     txt = '*) Determinados servidores obligan a registrarse para permitir su acceso.'
@@ -2541,21 +2541,21 @@ def show_help_uptobox(item):
 
     txt += '[CR][CR]*) Hay servidores que limitan el [B][COLOR gold]tiempo máximo de visionado diario[/COLOR][/B] (aprox. 150 minutos).'
 
-    platformtools.dialog_textviewer('Información servidor Uptobox', txt)
+    tools.dialog_textviewer('Información servidor Uptobox', txt)
 
 
 def show_help_youtube(item):
     logger.info()
 
     if not servertools.is_server_available('youtube'):
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]El servidor está Inactivo[/B][/COLOR]' % color_avis)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]El servidor está Inactivo[/B][/COLOR]' % color_avis)
         return
 
     txt = '*) Si su Media Center es una versión anterior a [COLOR gold][B]19.x[/COLOR][/B][CR][CR]'
 
     txt += '*) [COLOR yellow][B]No hay solución para este servidor, y tampoco podrá visualizar Traílers[/B][/COLOR]'
 
-    platformtools.dialog_textviewer('Información servidor Youtube', txt)
+    tools.dialog_textviewer('Información servidor Youtube', txt)
 
 
 def show_server_report(item):
@@ -2571,7 +2571,7 @@ def show_server_report(item):
 
     txt += '[CR][CR]*) Muchas gracias, por vuestro tiempo y comprensión al respecto'
 
-    platformtools.dialog_textviewer('Como Reportar posible Fallo en la Reproducción de servidores', txt)
+    tools.dialog_textviewer('Como Reportar posible Fallo en la Reproducción de servidores', txt)
 
 
 def show_help_settings(item):
@@ -2612,7 +2612,7 @@ def show_help_settings(item):
     txt += '[CR][CR]*) Exiten más parámetros en los [COLOR gold]Ajustes[/COLOR] de Balandro, para tener personalizada su ejecución.'
     txt += ' Divididos por categorías [COLOR gold]Menú, Canales, Parental, Dominios, Cuentas, Play, Proxies, Torrents, Buscar, etc.[/COLOR].'
 
-    platformtools.dialog_textviewer('Notas sobre algunos Parámetros de la Ajustes', txt)
+    tools.dialog_textviewer('Notas sobre algunos Parámetros de la Ajustes', txt)
 
 
 def show_help_tips(item):
@@ -2643,7 +2643,7 @@ def show_help_tips(item):
             txt += ' Luego ves a [COLOR wheat][B]Preferidos[/B][/COLOR] donde podrás gestionar lo necesario para la serie. Además puedes usar [COLOR gold]Buscar en otros canales[/COLOR] y desde el listado de resultados con el'
             txt += ' [COLOR yellow][B]Menú Contextual[/B][/COLOR] también los puedes guardar y se añadirán a los enlaces que ya tenías. De esta manera tendrás alternativas en diferentes enlaces por si algún día falla alguno ó desaparece.'
 
-    platformtools.dialog_textviewer('Trucos y consejos varios', txt)
+    tools.dialog_textviewer('Trucos y consejos varios', txt)
 
 
 def show_help_use(item):
@@ -2677,7 +2677,7 @@ def show_help_use(item):
             txt += ' Selecciona alguno de los enlaces igual que cuando se quiere reproducir y empezará la descarga.'
             txt += ' Para ver lo descargado, accede a [COLOR seagreen][B]Descargas[/B][/COLOR] desde el menú principal.'
 
-    platformtools.dialog_textviewer('Ejemplos de uso de Balandro', txt)
+    tools.dialog_textviewer('Ejemplos de uso de Balandro', txt)
 
 
 def show_help_faq(item):
@@ -2758,7 +2758,7 @@ def show_help_faq(item):
     txt += '[COLOR darkorange][B]   <playlisttimeout>-1</playlisttimeout>[/B][/COLOR][CR]'
     txt += '[COLOR darkorange][B]</advancedsettings>[/B][/COLOR]'
 
-    platformtools.dialog_textviewer('Preguntas Frecuentes', txt)
+    tools.dialog_textviewer('Preguntas Frecuentes', txt)
 
 
 def show_help_notice(item):
@@ -2789,7 +2789,7 @@ def show_help_notice(item):
 
     txt += '[CR]Saludos, Balandro Team[CR]'
 
-    platformtools.dialog_textviewer('Comunicado Oficial de Balandro', txt)
+    tools.dialog_textviewer('Comunicado Oficial de Balandro', txt)
 
 
 def show_not_contemplated(item):
@@ -2834,7 +2834,7 @@ def show_not_contemplated(item):
     txt += '   - Acceder a [COLOR gold][B]Una Página Concreta[/B][/COLOR] en los listados de las opciones de los canales[CR]'
     txt += '   - Incluir el [COLOR goldenrod][B]Rating[/B][/COLOR] en los listados de las opciones de los canales[CR]'
 
-    platformtools.dialog_textviewer('¿ Qué NO está contemplado/garantizado en Balandro ?', txt)
+    tools.dialog_textviewer('¿ Qué NO está contemplado/garantizado en Diegox ?', txt)
 
 
 def show_not_play(item):
@@ -2847,7 +2847,7 @@ def show_not_play(item):
     txt += '    - Integración con [COLOR powderblue][B]Cuentas[/B][/COLOR] [COLOR gold][B]Alldebrid, Realdebrid, ó similares[/B][/COLOR][CR]'
     txt += '    - Algunos Servidores que dada su complejidad para efectuar [COLOR orchid][B]Play[/B][/COLOR] [COLOR gold]No están Soportados[/COLOR][CR]'
 
-    platformtools.dialog_textviewer('¿ Qué NO está contemplado en Balandro ?', txt)
+    tools.dialog_textviewer('¿ Qué NO está contemplado en Balandro ?', txt)
 
 
 def show_not_download(item):
@@ -2859,7 +2859,7 @@ def show_not_download(item):
     txt += ' - NO se admiten las descargas de ficheros en formatos [COLOR gold]m3u8,  mpd,  rtmp,  torrent[/COLOR][CR]'
     txt += ' - NO están permitidas las descargas de ficheros en formato Comprimido [COLOR gold]zip,  rar,  etc.[/COLOR][CR]'
 
-    platformtools.dialog_textviewer('¿ Qué NO está contemplado en las Descargas ?', txt)
+    tools.dialog_textviewer('¿ Qué NO está contemplado en las Descargas ?', txt)
 
 
 def show_preferidos_parameters(item):
@@ -2898,7 +2898,7 @@ def show_preferidos_parameters(item):
 
     txt += ' - [COLOR cyan]Lista de Episodios: Cuantos Episodios por página (por defecto Fecha de Emisión): [/COLOR][COLOR red][B]' + str(config.get_setting('tracking_perpage_episodes', default=10)) + '[/B][/COLOR][CR]'
 
-    platformtools.dialog_textviewer('Información Ajustes Preferidos', txt)
+    tools.dialog_textviewer('Información Ajustes Preferidos', txt)
 
 
 def show_help_tracking(item):
@@ -2950,7 +2950,7 @@ def show_help_tracking(item):
     txt += 'Una alternativa es añadir los [COLOR wheat]Preferidos[/COLOR] de Balandro a los [COLOR gold]favoritos/videoteca genérica[/COLOR] de su Media center.'
     txt += ' ó bien, añadir el contenido de [COLOR wheat]Preferidos[/COLOR] de Balandro a la [COLOR gold]Videoteca genérica[/COLOR] de su Media center, con el Add-On externo [COLOR gold]ADD TO LIB[/COLOR]'
 
-    platformtools.dialog_textviewer('Preferidos y su Funcionamiento', txt)
+    tools.dialog_textviewer('Preferidos y su Funcionamiento', txt)
 
 
 def show_help_tracking_update(item):
@@ -2981,7 +2981,7 @@ def show_help_tracking_update(item):
     txt += 'En [COLOR wheat]Preferidos[/COLOR] estarán dentro de sus series respectivas, pero también se puede ver un listado de los últimos episodios añadidos'
     txt += ' por fecha de emisión ó de actualización en los canales.'
 
-    platformtools.dialog_textviewer('Búsqueda automática de nuevos episodios', txt)
+    tools.dialog_textviewer('Búsqueda automática de nuevos episodios', txt)
 
 
 def show_help_descargas(item):
@@ -3000,7 +3000,7 @@ def show_help_descargas(item):
     txt += ' - NO se admiten las descargas de ficheros en formatos [COLOR gold]m3u8,  mpd,  rtmp,  torrent[/COLOR][CR]'
     txt += ' - NO están permitidas las descargas de ficheros en formato Comprimido [COLOR gold]zip,  rar,  etc.[/COLOR][CR]'
 
-    platformtools.dialog_textviewer('Descargas y su Funcionamiento', txt)
+    tools.dialog_textviewer('Descargas y su Funcionamiento', txt)
 
 
 def show_help_usb(item):
@@ -3018,7 +3018,7 @@ def show_help_usb(item):
     txt += 'seleccionando cualquier fichero existente en sus [COLOR seagreen][B]Descargas[/B][/COLOR].[CR]'
 
 
-    platformtools.dialog_textviewer('¿ Se puede Descargar directamente en una Unidad USB ?', txt)
+    tools.dialog_textviewer('¿ Se puede Descargar directamente en una Unidad USB ?', txt)
 
 
 def show_help_proxies(item):
@@ -3086,7 +3086,7 @@ def show_help_proxies(item):
     txt += 'Los proxies que se pueden encontrar en la búsqueda [COLOR yellowgreen][B]son todos gratuítos pero tienen ciertas limitaciones y no siempre están activos.[/B][/COLOR]'
     txt += ' Para cada canal se guardan los proxies a utilizar, pero es posible que algunos días cuando entres tengas que volver a hacer una búsqueda de proxies porque han dejado de funcionar.'
 
-    platformtools.dialog_textviewer('Uso de Proxies', txt)
+    tools.dialog_textviewer('Uso de Proxies', txt)
 
 
 def show_help_metodos(item):
@@ -3106,7 +3106,7 @@ def show_help_metodos(item):
 
     txt += 'Dentro de la Consola del Proceso de obtención de proxies, [COLOR cyan][B]CANCELAR[/B][/COLOR], y ahí [COLOR red][B]Quitar los proxies[/B][/COLOR]'
 
-    platformtools.dialog_textviewer('Métodos para Quitar los Proxies de un canal', txt)
+    tools.dialog_textviewer('Métodos para Quitar los Proxies de un canal', txt)
 
 
 def show_channels_parameters(item):
@@ -3221,12 +3221,12 @@ def show_channels_parameters(item):
 
         txt += '[CR] - Tiene [COLOR plum][B]Habilitada[/B][/COLOR] la opción del Menú [B][COLOR darkorange]Desarrollo[/COLOR][/B] en los ajustes categoría [B][COLOR goldenrod]Team[/COLOR][/B]'
 
-    platformtools.dialog_textviewer('Información Parámetros Actuales para Mostrar los Canales en las Listas', txt)
+    tools.dialog_textviewer('Información Parámetros Actuales para Mostrar los Canales en las Listas', txt)
 
 
 def show_parental_parameters(item):
     if config.get_setting('mnu_simple', default=False):
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]NO disponible en [COLOR yellow]Menú Simplificado[/B][/COLOR]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]NO disponible en [COLOR yellow]Menú Simplificado[/B][/COLOR]' % color_alert)
         return
 
     txt = '[COLOR orange][B]ADULTOS (+18):[/B][/COLOR][CR]'
@@ -3241,7 +3241,7 @@ def show_parental_parameters(item):
         if descartar_anime: txt += ' - Tiene [COLOR plum][B]Habilitada[/B][/COLOR] la opción para Descartar los Canales Exclusivos de [B][COLOR springgreen]Animes[/COLOR][/B][CR]'
         if descartar_xxx: txt += ' - Tiene [COLOR plum][B]Habilitada[/B][/COLOR] la opción para Descartar los Canales Exclusivos de [B][COLOR orange]Adultos[/COLOR][/B][CR]'
 
-    platformtools.dialog_textviewer('Información Parámetros Actuales para Adultos y Parental', txt)
+    tools.dialog_textviewer('Información Parámetros Actuales para Adultos y Parental', txt)
 
 
 def show_play_parameters(item):
@@ -3372,7 +3372,7 @@ def show_play_parameters(item):
     else:
         txt += '[CR][CR][COLOR fuchsia][B] - TRAÍLERS:[/B][/COLOR] [COLOR yellow][B]YouTube[/B][/COLOR] [COLOR red][B]No Instalado[/B][/COLOR]'
 
-    platformtools.dialog_textviewer('Información Parámetros Actuales en Play', txt)
+    tools.dialog_textviewer('Información Parámetros Actuales en Play', txt)
 
 
 def show_prx_parameters(item):
@@ -3508,7 +3508,7 @@ def show_prx_parameters(item):
 
     if config.get_setting('proxies_list', default=False): txt += '[CR][COLOR gold] - Habilitar la selección de su Lista Personalizada:[/COLOR]' + ' [COLOR cyan][B] Activado[/B][/COLOR][CR]'
 
-    platformtools.dialog_textviewer('Información Parámetros Actuales en Proxies', txt)
+    tools.dialog_textviewer('Información Parámetros Actuales en Proxies', txt)
 
 
 def _menu_parameters():
@@ -3709,7 +3709,7 @@ def show_mnu_specials(item):
         txt += '[COLOR yellow][B]OTROS ACCESOS EN PRINCIPAL, MENÚS Y SUB-MENÚS:[/B][/COLOR][CR]'
         txt += txt_specials
 
-    platformtools.dialog_textviewer('Información Parámetros Actuales para Otros Accesos en Principal, Menús y Sub-Menús', txt)
+    tools.dialog_textviewer('Información Parámetros Actuales para Otros Accesos en Principal, Menús y Sub-Menús', txt)
 
 
 def _menu_specials():
@@ -3825,7 +3825,7 @@ def show_menu_parameters(item):
 
         txt += ' - Tiene [COLOR plum][B]Habilitada[/B][/COLOR] la opción del Menú principal [B][COLOR darkorange]Desarrollo[/COLOR][/B] en los ajustes [B][COLOR goldenrod]Team[/COLOR][/B][CR][CR]'
 
-    platformtools.dialog_textviewer('Información Parámetros Actuales para los Menús', txt)
+    tools.dialog_textviewer('Información Parámetros Actuales para los Menús', txt)
 
 
 def show_help_providers(item):
@@ -3902,10 +3902,10 @@ def show_help_providers(item):
 
     if item.ampliada:
         if not config.get_setting('proxies_extended', default=False):
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún No está configurado en Ajustes[/COLOR][/B]' % color_adver)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún No está configurado en Ajustes[/COLOR][/B]' % color_adver)
             return
 
-    platformtools.dialog_textviewer('Proveedores de proxies', txt)
+    tools.dialog_textviewer('Proveedores de proxies', txt)
 
 
 def show_help_recommended(item):
@@ -3946,7 +3946,7 @@ def show_help_recommended(item):
 
     txt += '[CR][COLOR yellowgreen][B]  Ó bien prescindir/desactivar el canal.[/B][/COLOR]'
 
-    platformtools.dialog_textviewer('Proveedores Recomendados de proxies', txt)
+    tools.dialog_textviewer('Proveedores Recomendados de proxies', txt)
 
 def show_help_providers2(item):
     logger.info()
@@ -3996,7 +3996,7 @@ def show_help_yourlist(item):
     txt += '[CR]     Si generaís vuestra lista personalizada, seguir la estructura de 1 proxy por línea,[CR]'
     txt += '     Ver la composición en el fichero adjunto, una vez descomprimido.[CR]'
 
-    platformtools.dialog_textviewer('Información Gestión fichero Lista-Proxies.txt', txt)
+    tools.dialog_textviewer('Información Gestión fichero Lista-Proxies.txt', txt)
 
 
 def proxies_show_vias(item):
@@ -4005,7 +4005,7 @@ def proxies_show_vias(item):
     txt = ''
 
     if not config.get_setting('proxies_vias', default=False):
-         platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún No está configurado en Ajustes[/COLOR][/B]' % color_adver)
+         tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún No está configurado en Ajustes[/COLOR][/B]' % color_adver)
          return
 
     txt += '[COLOR goldenrod][B]Proveedores Vías Alternativas (si no se obtubieron suficientes proxies a analizar):[/B][/COLOR][CR]'
@@ -4067,7 +4067,7 @@ def proxies_show_vias(item):
     txt += ' [COLOR cyan][B] 54 [COLOR yellow][B]Proxyscan.io socks4[/B][/COLOR][CR]'
     txt += ' [COLOR cyan][B] 55 [COLOR yellow][B]Proxyscan.io socks5[/B][/COLOR][CR]'
 
-    platformtools.dialog_textviewer('Proveedores Vías Alternativas de proxies', txt)
+    tools.dialog_textviewer('Proveedores Vías Alternativas de proxies', txt)
 
 
 def show_help_clean(item):
@@ -4229,7 +4229,7 @@ def show_help_clean(item):
 
     txt = txt.replace('[CR][CR][CR]', '[CR][CR]')
 
-    platformtools.dialog_textviewer('Información Limpiezas (Personalizada)', txt)
+    tools.dialog_textviewer('Información Limpiezas (Personalizada)', txt)
 
 
 def show_help_fixes(item):
@@ -4245,7 +4245,7 @@ def show_help_fixes(item):
 
     txt += '[CR][COLOR gold] Los Fixes siempre se actualizan automáticamente al iniciar sesión en su Media Center.[/COLOR]'
 
-    platformtools.dialog_textviewer('Información ¿ Qué son los fixes ?', txt)
+    tools.dialog_textviewer('Información ¿ Qué son los fixes ?', txt)
 
 
 def show_help_recaptcha(item):
@@ -4259,7 +4259,7 @@ def show_help_recaptcha(item):
 
     txt += '[CR][CR]Dada su dificultad [COLOR gold]NO[/COLOR] está contemplado en el Add-On esta situación.'
 
-    platformtools.dialog_textviewer('Información ¿ Qué significa Requiere verificación [COLOR red]reCAPTCHA[/COLOR] ?', txt)
+    tools.dialog_textviewer('Información ¿ Qué significa Requiere verificación [COLOR red]reCAPTCHA[/COLOR] ?', txt)
 
 
 def show_help_acortador(item):
@@ -4275,7 +4275,7 @@ def show_help_acortador(item):
 
     txt += '[CR][CR]Dada su dificultad [COLOR gold]NO[/COLOR] está contemplado en el Add-On esta situación.'
 
-    platformtools.dialog_textviewer('Información ¿ Qué significa Tiene [COLOR plum]Acortador[/COLOR] del enlace ?', txt)
+    tools.dialog_textviewer('Información ¿ Qué significa Tiene [COLOR plum]Acortador[/COLOR] del enlace ?', txt)
 
 
 def show_version(item):
@@ -4289,7 +4289,7 @@ def show_version(item):
        try: txt = open(os.path.join(config.get_runtime_path(), 'version.txt'), encoding="utf8").read()
        except: pass
 
-    if txt: platformtools.dialog_textviewer('Información versión', txt)
+    if txt: tools.dialog_textviewer('Información versión', txt)
 
 
 def show_changelog(item):
@@ -4303,7 +4303,7 @@ def show_changelog(item):
        try: txt = open(os.path.join(config.get_runtime_path(), 'changelog.txt'), encoding="utf8").read()
        except: pass
 
-    if txt: platformtools.dialog_textviewer('Historial de versiones', txt)
+    if txt: tools.dialog_textviewer('Historial de versiones', txt)
 
 
 def show_dev_notes(item):
@@ -4317,7 +4317,7 @@ def show_dev_notes(item):
        try: txt = open(os.path.join(config.get_runtime_path(), 'dev-notes.txt'), encoding="utf8").read()
        except: pass
 
-    if txt: platformtools.dialog_textviewer('Notas para developers', txt)
+    if txt: tools.dialog_textviewer('Notas para developers', txt)
 
 
 def show_todo_log(item):
@@ -4328,7 +4328,7 @@ def show_todo_log(item):
     existe = filetools.exists(path)
 
     if not existe:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún No hay el fichero Log[/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún No hay el fichero Log[/COLOR][/B]' % color_alert)
         return
 
     txt = ''
@@ -4340,9 +4340,9 @@ def show_todo_log(item):
         except: pass
 
     if txt:
-        platformtools.dialog_textviewer('Fichero Log ' + item.todo, txt)
+        tools.dialog_textviewer('Fichero Log ' + item.todo, txt)
     else:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Información[/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Información[/COLOR][/B]' % color_alert)
 
 
 def show_report(item):
@@ -4352,7 +4352,7 @@ def show_report(item):
     if not loglevel >= 2:
         config.set_setting('debug', 2)
 
-    platformtools.dialog_ok(config.__addon_name + ' - Reportes', '[COLOR yellow]Por favor, reproduzca el [B]Problema y Regrese[/B] a esta sección.[/COLOR]', 'para obtener [COLOR cyan][B]una Copia del Fichero LOG[/B][/COLOR] de su Media Center y poder [COLOR goldenrod][B]Remitirnoslo[/B][/COLOR] a la mayor brevedad posible.')
+    tools.dialog_ok(config.__addon_name + ' - Reportes', '[COLOR yellow]Por favor, reproduzca el [B]Problema y Regrese[/B] a esta sección.[/COLOR]', 'para obtener [COLOR cyan][B]una Copia del Fichero LOG[/B][/COLOR] de su Media Center y poder [COLOR goldenrod][B]Remitirnoslo[/B][/COLOR] a la mayor brevedad posible.')
 
 
 def show_log(item):
@@ -4360,7 +4360,7 @@ def show_log(item):
 
     loglevel = config.get_setting('debug', 0)
     if not loglevel >= 2:
-        if not platformtools.dialog_yesno(config.__addon_name, 'El nivel actual de información del fichero LOG de su Media Center NO esta Ajustado al máximo. ¿ Desea no obstante visualizarlo ?'): 
+        if not tools.dialog_yesno(config.__addon_name, 'El nivel actual de información del fichero LOG de su Media Center NO esta Ajustado al máximo. ¿ Desea no obstante visualizarlo ?'): 
             return
 
     path = translatePath(os.path.join('special://logpath/', ''))
@@ -4380,12 +4380,12 @@ def show_log(item):
                 break
 
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se localiza su fichero Log[/COLOR][/B]' % color_alert)
-        platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]Media Center NO Oficial[/B][/COLOR]', '[COLOR red][B]No se ha localizado su fichero Log[/B][/COLOR]', '[COLOR yellowgreen][B]Localize su fichero Log, mediante un Navegador de Archivos en su Media Center.[/B][/COLOR]')
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se localiza su fichero Log[/COLOR][/B]' % color_alert)
+        tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]Media Center NO Oficial[/B][/COLOR]', '[COLOR red][B]No se ha localizado su fichero Log[/B][/COLOR]', '[COLOR yellowgreen][B]Localize su fichero Log, mediante un Navegador de Archivos en su Media Center.[/B][/COLOR]')
         return
 
     size = filetools.getsize(file)
-    if size > 999999: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Cargando fichero log[/COLOR][/B]' % color_infor)
+    if size > 999999: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Cargando fichero log[/COLOR][/B]' % color_infor)
 
     txt = ''
 
@@ -4401,7 +4401,7 @@ def show_log(item):
         txt = txt.replace('balandro.', '[COLOR yellow][B]Balandro[/B][/COLOR].')
         txt = txt.replace('balandro ', '[COLOR yellow][B]Balandro[/B][/COLOR] ')
 
-    if txt: platformtools.dialog_textviewer('Fichero LOG de su Media Center', txt)
+    if txt: tools.dialog_textviewer('Fichero LOG de su Media Center', txt)
 
 
 def copy_log(item):
@@ -4409,7 +4409,7 @@ def copy_log(item):
 
     loglevel = config.get_setting('debug', 0)
     if not loglevel >= 2:
-        if not platformtools.dialog_yesno(config.__addon_name, 'El nivel actual de información del fichero LOG de su Media Center NO está Ajustado al máximo. [B][COLOR %s]¿ Desea no obstante obtener una Copia ?[/B][/COLOR]' % color_infor):
+        if not tools.dialog_yesno(config.__addon_name, 'El nivel actual de información del fichero LOG de su Media Center NO está Ajustado al máximo. [B][COLOR %s]¿ Desea no obstante obtener una Copia ?[/B][/COLOR]' % color_infor):
             return
 
     path = translatePath(os.path.join('special://logpath/', ''))
@@ -4429,8 +4429,8 @@ def copy_log(item):
                 break
 
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se localiza su fichero Log[/COLOR][/B]' % color_alert)
-        platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]Media Center NO Oficial[/B][/COLOR]', '[COLOR red][B]No se ha localizado su fichero Log[/B][/COLOR]', '[COLOR yellowgreen][B]Localize su fichero Log, mediante un Navegador de Archivos en su Media Center.[/B][/COLOR]')
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se localiza su fichero Log[/COLOR][/B]' % color_alert)
+        tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B]Media Center NO Oficial[/B][/COLOR]', '[COLOR red][B]No se ha localizado su fichero Log[/B][/COLOR]', '[COLOR yellowgreen][B]Localize su fichero Log, mediante un Navegador de Archivos en su Media Center.[/B][/COLOR]')
         return
 
     destino_path = xbmcgui.Dialog().browseSingle(3, 'Seleccionar carpeta dónde copiar', 'files', '', False, False, '')
@@ -4439,16 +4439,16 @@ def copy_log(item):
     origen = os.path.join(path, file_log)
     destino = filetools.join(destino_path, file_log)
     if not filetools.copy(origen, destino, silent=False):
-        platformtools.dialog_ok(config.__addon_name, 'Error, no se ha podido copiar el fichero Log!', origen, destino)
+        tools.dialog_ok(config.__addon_name, 'Error, no se ha podido copiar el fichero Log!', origen, destino)
         return
 
-    platformtools.dialog_notification('Fichero Log copiado', file_log)
+    tools.dialog_notification('Fichero Log copiado', file_log)
 
     time.sleep(0.5)
 
     loglevel = config.get_setting('debug', 0)
     if not loglevel == 0:
-        if not platformtools.dialog_yesno(config.__addon_name, 'El Ajuste actual del nivel de información del fichero LOG de su Media Center REDUCE el rendimiento de su equipo. [B][COLOR %s]¿ Desea mantener ese Nivel de información ?[/B][/COLOR]' % color_avis):
+        if not tools.dialog_yesno(config.__addon_name, 'El Ajuste actual del nivel de información del fichero LOG de su Media Center REDUCE el rendimiento de su equipo. [B][COLOR %s]¿ Desea mantener ese Nivel de información ?[/B][/COLOR]' % color_avis):
             config.set_setting('debug', '0')
 
 
@@ -4486,7 +4486,7 @@ def show_advs(item):
     existe = filetools.exists(file)
 
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay fichero Advanced Settings[/COLOR][/B]' % color_infor)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay fichero Advanced Settings[/COLOR][/B]' % color_infor)
         return
 
     txt = ''
@@ -4497,7 +4497,7 @@ def show_advs(item):
        try: txt = open(os.path.join(path, file_advs), encoding="utf8").read()
        except: pass
 
-    if txt: platformtools.dialog_textviewer('Fichero Advanced Settings de su Media Center', txt)
+    if txt: tools.dialog_textviewer('Fichero Advanced Settings de su Media Center', txt)
 
 
 def show_favs(item):
@@ -4510,7 +4510,7 @@ def show_favs(item):
     existe = filetools.exists(file)
 
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay fichero Favourites Settings[/COLOR][/B]' % color_infor)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay fichero Favourites Settings[/COLOR][/B]' % color_infor)
         return
 
     txt = ''
@@ -4537,10 +4537,10 @@ def show_favs(item):
         if matches == 0: existe = False
 
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Favourites Settings Sin Datos[/COLOR][/B]' % color_exec)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Favourites Settings Sin Datos[/COLOR][/B]' % color_exec)
         return
 
-    if txt: platformtools.dialog_textviewer('Fichero Favourites Settings de su Media Center', txt)
+    if txt: tools.dialog_textviewer('Fichero Favourites Settings de su Media Center', txt)
 
 
 def show_pcfs(item):
@@ -4555,7 +4555,7 @@ def show_pcfs(item):
     existe = filetools.exists(file)
 
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay fichero PlayerCoreFactory Settings[/COLOR][/B]' % color_infor)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay fichero PlayerCoreFactory Settings[/COLOR][/B]' % color_infor)
         return
 
     txt = ''
@@ -4566,7 +4566,7 @@ def show_pcfs(item):
        try: txt = open(os.path.join(path, file_pcfs), encoding="utf8").read()
        except: pass
 
-    if txt: platformtools.dialog_textviewer('Fichero PlayerCoreFactory Settings de su Media Center', txt)
+    if txt: tools.dialog_textviewer('Fichero PlayerCoreFactory Settings de su Media Center', txt)
 
 
 def show_yourlist(item):
@@ -4577,7 +4577,7 @@ def show_yourlist(item):
     existe = filetools.exists(path)
 
     if not existe:
-        platformtools.dialog_ok(config.__addon_name + ' [COLOR yellow][B].../addon_data.../plugin.video.balandro[/B][/COLOR]', 'Aún No hay fichero Lista de Proxies', '[B][COLOR %s]Lista-proxies.txt[/COLOR][/B]' % color_alert)
+        tools.dialog_ok(config.__addon_name + ' [COLOR yellow][B].../addon_data.../plugin.video.balandro[/B][/COLOR]', 'Aún No hay fichero Lista de Proxies', '[B][COLOR %s]Lista-proxies.txt[/COLOR][/B]' % color_alert)
         return
 
     txt = ''
@@ -4589,9 +4589,9 @@ def show_yourlist(item):
         except: pass
 
     if txt:
-        platformtools.dialog_textviewer('Fichero Lista de Proxies', txt)
+        tools.dialog_textviewer('Fichero Lista de Proxies', txt)
     else:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Información[/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Información[/COLOR][/B]' % color_alert)
 
 
 def show_help_adults(item):
@@ -4611,7 +4611,7 @@ def show_help_adults(item):
 
     txt += '[CR]*) También puede desactivar esta opción en los Ajustes, [COLOR cyan][B]categorías[/COLOR] [COLOR yellow]Menú y Parental[/B][/COLOR][CR]'
 
-    platformtools.dialog_textviewer('Información Control Parental', txt)
+    tools.dialog_textviewer('Información Control Parental', txt)
 
 
 def show_help_domains(item):
@@ -4636,7 +4636,7 @@ def show_help_domains(item):
     elif item.category == 'HdFull':
         if config.get_setting('channel_hdfull_proxies', default=''):
 	        txt += '[CR]  [B][COLOR cyan]Actualmente Tiene[/COLOR] [COLOR red]Proxies Configurados[/COLOR][/B][CR]'
- 
+
         txt += '[CR][COLOR chocolate][B]Para conocer los Dominios Vigentes:[/COLOR][/B][CR]'
         txt += '  Acceda a través de un Navegador de Internet a [B][COLOR greenyellow]dominioshdfull.com[/COLOR][/B]'
 
@@ -4692,7 +4692,7 @@ def show_help_domains(item):
     txt += '  [COLOR orange][B]Verificando ...[/COLOR] [COLOR orangered]CLOUDFLARE[/B][/COLOR][CR]'
     txt += '  necesitará obligatoriamente usar [COLOR red][B]Proxies[/B][/COLOR] en el canal.'
 
-    platformtools.dialog_textviewer('Gestión Dominios ' + item.category, txt)
+    tools.dialog_textviewer('Gestión Dominios ' + item.category, txt)
 
 
 def show_help_prales(item):
@@ -4815,10 +4815,10 @@ def show_help_prales(item):
             if datos['active']: txt += '   [B][COLOR yellow]Star[/COLOR][/B][CR]'
 
     if not txt:
-        platformtools.dialog_notification(config.__addon_name + ' ' + item.category, '[B][COLOR %s]Sin Clones Activos[/B][/COLOR]' % color_adver)
+        tools.dialog_notification(config.__addon_name + ' ' + item.category, '[B][COLOR %s]Sin Clones Activos[/B][/COLOR]' % color_adver)
         return
 
-    platformtools.dialog_textviewer(item.category + ' Cuales son sus Clones', txt)
+    tools.dialog_textviewer(item.category + ' Cuales son sus Clones', txt)
 
 
 def show_help_torrents(item):
@@ -4857,14 +4857,14 @@ def show_help_torrents(item):
 
     txt += '[CR]*) Para [COLOR gold][B]Otros Motores Torrent[/B][/COLOR], le sugerimos localize tutoriales al respecto en [COLOR cyan][B]YouTube[/B][/COLOR]'
 
-    platformtools.dialog_textviewer('¿ Dónde obtener los Add-Ons para torrents ?', txt)
+    tools.dialog_textviewer('¿ Dónde obtener los Add-Ons para torrents ?', txt)
 
 
 def show_help_semillas(item):
     logger.info()
 
     if not xbmc.getCondVisibility('System.HasAddon("plugin.video.elementum")'):
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún No Instalado[/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún No Instalado[/COLOR][/B]' % color_alert)
         return
 
     txt = '*) Los archivos Torrent se proveen de [COLOR gold][B]Semillas[/B][/COLOR] usuarios que están Online con las partes de ese archivo.'
@@ -4881,16 +4881,16 @@ def show_help_semillas(item):
 
     txt += '[CR][CR]*) Por lo tanto, tocará esperar, a que estén Onlime [COLOR gold][B]Todos los Usuarios[/B][/COLOR] con las partes para efectuar el Play.'
 
-    platformtools.dialog_textviewer('Información archivos Torrent (Semillas)', txt)
+    tools.dialog_textviewer('Información archivos Torrent (Semillas)', txt)
 
 
 def show_torrents_parameters(item):
     if config.get_setting('mnu_simple', default=False):
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]NO disponible en [COLOR yellow]Menú Simplificado[/B][/COLOR]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]NO disponible en [COLOR yellow]Menú Simplificado[/B][/COLOR]' % color_alert)
         return
 
     if not config.get_setting('mnu_torrents', default=True):
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Opción Des-Activada en [COLOR tan]Menú[/B][/COLOR]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Opción Des-Activada en [COLOR tan]Menú[/B][/COLOR]' % color_alert)
         return
 
     txt = '[COLOR blue][B]ADD-ONS TORRENTS:[/B][/COLOR][CR]'
@@ -4931,7 +4931,7 @@ def show_torrents_parameters(item):
     if xbmc.getCondVisibility('System.HasAddon("plugin.video.elementum")'):
         txt += '[COLOR blue][B]VER[/B][/COLOR] Información Archivos Torrent [COLOR goldenrod][B]SEMILLAS[/B][/COLOR] en la Ayuda de [COLOR blue][B]TORRENTS[/B][/COLOR]'
 
-    platformtools.dialog_textviewer('Información Parámetros Actuales en Torrents', txt)
+    tools.dialog_textviewer('Información Parámetros Actuales en Torrents', txt)
 
 
 def show_help_centers(item):
@@ -4950,7 +4950,7 @@ def show_help_centers(item):
     txt += '   Acceda a la Web [COLOR violet][B]www.pluginsxbmc.com[/B][/COLOR][CR]'
     txt += '   para obtener [COLOR goldenrod]Tutoriales, Instalaciones, Funciones, Add-Ons, Noticias, etc.[/COLOR]'
 
-    platformtools.dialog_textviewer('¿ Dónde obtener soporte para su Media Center ?', txt)
+    tools.dialog_textviewer('¿ Dónde obtener soporte para su Media Center ?', txt)
 
 
 def show_help_vias(item):
@@ -4986,14 +4986,14 @@ def show_help_vias(item):
 
     txt += '[CR]*) Ó bien, le sugerimos localize tutoriales en [COLOR cyan][B]YouTube[/B][/COLOR], para obtener información al respecto.'
 
-    platformtools.dialog_textviewer('¿ Dónde obtener los Add-Ons para Vías Alternativas ?', txt)
+    tools.dialog_textviewer('¿ Dónde obtener los Add-Ons para Vías Alternativas ?', txt)
 
 
 def show_help_elementum(item):
     logger.info()
 
     if not xbmc.getCondVisibility('System.HasAddon("plugin.video.elementum")'):
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún No Instalado[/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún No Instalado[/COLOR][/B]' % color_alert)
         return
 
     txt = '*) Si su Media Center es una versión posterior a [COLOR gold][B]18.x[/COLOR][/B] y [COLOR yellow][B]NO[/B][/COLOR] opera bajo el sistema operativo [COLOR gold][B]Windows[/COLOR][/B], en determinadas ocasiones, puede fallar la Reproducción, a través de este Motor Torrent.'
@@ -5003,7 +5003,7 @@ def show_help_elementum(item):
 
     txt += '[CR][CR]*) Localize tutoriales en [COLOR cyan][B]YouTube[/B][/COLOR], para obtener información al respecto.'
 
-    platformtools.dialog_textviewer('Información Motor Torrent Elementum', txt)
+    tools.dialog_textviewer('Información Motor Torrent Elementum', txt)
 
 
 def show_legalidad(item):
@@ -5030,7 +5030,7 @@ def show_legalidad(item):
 
     txt += '[CR][CR]*)[COLOR red][B][I] Queda totalmente Prohibida su Re-Distribución, sin la Autorización Fehaciente de sus Creadores.[/I][/B][/COLOR]'
 
-    platformtools.dialog_textviewer('Cuestiones Legales', txt)
+    tools.dialog_textviewer('Cuestiones Legales', txt)
 
 
 def show_license(item):
@@ -5044,11 +5044,11 @@ def show_license(item):
        try: txt = open(os.path.join(config.get_runtime_path(), 'LICENSE'), encoding="utf8").read()
        except: pass
 
-    if txt: platformtools.dialog_textviewer('Licencia (Gnu Gpl v3)', txt)
+    if txt: tools.dialog_textviewer('Licencia (Gnu Gpl v3)', txt)
 
 
 def show_test(item):
-    platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Cargando Información Sistema[/B][/COLOR]' % color_exec)
+    tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Cargando Información Sistema[/B][/COLOR]' % color_exec)
 
     your_ip = ''
 
@@ -5068,7 +5068,7 @@ def show_test(item):
         except: pass
 
     if not your_ip:
-	    platformtools.dialog_ok(config.__addon_name, '[COLOR red][B]Parece que NO hay conexión con internet.[/B][/COLOR]', 'Compruebelo realizando cualquier Búsqueda, desde un Navegador de Internet.')
+	    tools.dialog_ok(config.__addon_name, '[COLOR red][B]Parece que NO hay conexión con internet.[/B][/COLOR]', 'Compruebelo realizando cualquier Búsqueda, desde un Navegador de Internet.')
 
     hay_repo = False
     if xbmc.getCondVisibility('System.HasAddon("%s")' % 'repository.balandro'): hay_repo = True
@@ -5952,24 +5952,24 @@ def show_test(item):
 
     if not ult_ver:
         if not access_repo:
-            platformtools.dialog_ok(config.__addon_name + ' Test del Sistema', '[COLOR cyan][B]Versión instalada [COLOR red][I]Sin Acceso al Repositorio [/I][/COLOR][COLOR yellow] ' + txt_ver + '[/B][/COLOR]' + txt_off, '[COLOR violet][B]Instale la última Versión del Repositorio [/COLOR][/B]')
+            tools.dialog_ok(config.__addon_name + ' Test del Sistema', '[COLOR cyan][B]Versión instalada [COLOR red][I]Sin Acceso al Repositorio [/I][/COLOR][COLOR yellow] ' + txt_ver + '[/B][/COLOR]' + txt_off, '[COLOR violet][B]Instale la última Versión del Repositorio [/COLOR][/B]')
         else:
            if not '-Fix' in txt:
                text_dev = ''
                if config.get_setting('developer_mode', default=False): text_dev = ' [COLOR yellow][B]Desarrollo[/B][/COLOR]'
 
                if txt_off:
-                  platformtools.dialog_ok(config.__addon_name + ' Test del Sistema' + text_dev, '[COLOR cyan][B]Versión instalada desfasada [/COLOR][COLOR yellow] ' + txt_ver + '[/B][/COLOR] [COLOR red][B][I]Sin Acceso a los Fixes[/I][/B]', '[COLOR violet][B]Espere a que el servidor de los Fixes esté de nuevo ON LINE[/COLOR][/B]')
+                  tools.dialog_ok(config.__addon_name + ' Test del Sistema' + text_dev, '[COLOR cyan][B]Versión instalada desfasada [/COLOR][COLOR yellow] ' + txt_ver + '[/B][/COLOR] [COLOR red][B][I]Sin Acceso a los Fixes[/I][/B]', '[COLOR violet][B]Espere a que el servidor de los Fixes esté de nuevo ON LINE[/COLOR][/B]')
                else:
-                  platformtools.dialog_ok(config.__addon_name + ' Test del Sistema' + text_dev, '[COLOR cyan][B]Versión instalada desfasada [/COLOR][COLOR yellow] ' + txt_ver + '[/B][/COLOR]' + txt_off, '[COLOR violet][B]Instale la última Versión disponible del Add-On[/COLOR][/B]')
+                  tools.dialog_ok(config.__addon_name + ' Test del Sistema' + text_dev, '[COLOR cyan][B]Versión instalada desfasada [/COLOR][COLOR yellow] ' + txt_ver + '[/B][/COLOR]' + txt_off, '[COLOR violet][B]Instale la última Versión disponible del Add-On[/COLOR][/B]')
            else:
               if txt_off:
-                  platformtools.dialog_ok(config.__addon_name + ' Test del Sistema', '[COLOR cyan][B]Versión instalada [COLOR red][I]Sin Acceso a los Fixes [/I][/COLOR][COLOR yellow] ' + txt_ver + '[/B][/COLOR]', '[COLOR violet][B]Espere a que el servidor de los Fixes esté de nuevo ON LINE[/COLOR][/B]')
+                  tools.dialog_ok(config.__addon_name + ' Test del Sistema', '[COLOR cyan][B]Versión instalada [COLOR red][I]Sin Acceso a los Fixes [/I][/COLOR][COLOR yellow] ' + txt_ver + '[/B][/COLOR]', '[COLOR violet][B]Espere a que el servidor de los Fixes esté de nuevo ON LINE[/COLOR][/B]')
     else:
        if txt_off:
-           platformtools.dialog_ok(config.__addon_name + ' Test del Sistema', '[COLOR cyan][B]Versión instalada [COLOR red][I]Sin Acceso a los Fixes [/I][/COLOR][COLOR yellow] ' + txt_ver + '[/B][/COLOR]', '[COLOR violet][B]Espere a que el servidor de los Fixes esté de nuevo ON LINE[/COLOR][/B]')
+           tools.dialog_ok(config.__addon_name + ' Test del Sistema', '[COLOR cyan][B]Versión instalada [COLOR red][I]Sin Acceso a los Fixes [/I][/COLOR][COLOR yellow] ' + txt_ver + '[/B][/COLOR]', '[COLOR violet][B]Espere a que el servidor de los Fixes esté de nuevo ON LINE[/COLOR][/B]')
 
-    platformtools.dialog_textviewer('Test status sistema', txt)
+    tools.dialog_textviewer('Test status sistema', txt)
 
 
 def show_plataforma(item):
@@ -5979,7 +5979,7 @@ def show_plataforma(item):
 
     txt = plataforma
 
-    platformtools.dialog_textviewer('Información sobre su Plataforma', txt)
+    tools.dialog_textviewer('Información sobre su Plataforma', txt)
 
 
 def get_plataforma(txt):
@@ -6097,7 +6097,7 @@ def show_last_fix(item):
 
     existe = filetools.exists(path)
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay fichero Fix[/COLOR][/B]' % color_infor)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No hay fichero Fix[/COLOR][/B]' % color_infor)
         return
 
     txt = ''
@@ -6165,7 +6165,7 @@ def show_last_fix(item):
 
         txt += '[CR][COLOR yellow][B]       Total Ficheros:  [/B][/COLOR]' + str(tot_files)
 
-        platformtools.dialog_textviewer('Información del último Fix instalado', txt)
+        tools.dialog_textviewer('Información del último Fix instalado', txt)
 
 
 def show_sets(item):
@@ -6176,10 +6176,10 @@ def show_sets(item):
     existe = filetools.exists(file_sets)
 
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No existe settings.xml[/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No existe settings.xml[/COLOR][/B]' % color_alert)
         return
 
-    if platformtools.dialog_yesno(config.__addon_name, '[COLOR cyan][B]¿ Desea Anular las Preferencias Obsoletas en sus Ajustes ?[/B][/COLOR]'):
+    if tools.dialog_yesno(config.__addon_name, '[COLOR cyan][B]¿ Desea Anular las Preferencias Obsoletas en sus Ajustes ?[/B][/COLOR]'):
         channels_proxies_memorized = config.get_setting('channels_proxies_memorized')
 
         filtros = {'active': False}
@@ -6537,8 +6537,8 @@ def show_sets(item):
                 servers_discarded = str(servers_discarded).replace(el_memorizado + ',', '').replace(el_memorizado, '').strip()
                 config.set_setting('servers_discarded', servers_discarded)
 
-        if i == 0: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Preferencias Obsoletas[/B][/COLOR]' % color_exec)
-        else: platformtools.dialog_ok(config.__addon_name, '[B][COLOR %s]Anuladas las Preferencias Obsoletas en sus Ajustes Personalizados.[/B][/COLOR]' % color_avis)
+        if i == 0: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin Preferencias Obsoletas[/B][/COLOR]' % color_exec)
+        else: tools.dialog_ok(config.__addon_name, '[B][COLOR %s]Anuladas las Preferencias Obsoletas en sus Ajustes Personalizados.[/B][/COLOR]' % color_avis)
 
     txt = ''
 
@@ -6548,7 +6548,7 @@ def show_sets(item):
         try: txt = open(os.path.join(file_sets), encoding="utf8").read()
         except: pass
 
-    if txt: platformtools.dialog_textviewer('Su fichero de Ajustes personalizados', txt)
+    if txt: tools.dialog_textviewer('Su fichero de Ajustes personalizados', txt)
 
 
 def show_cook(item):
@@ -6559,7 +6559,7 @@ def show_cook(item):
     existe = filetools.exists(file_cook)
 
     if existe == False:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No existe cookies.dat[/COLOR][/B]' % color_adver)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No existe cookies.dat[/COLOR][/B]' % color_adver)
         return
 
     txt = ''
@@ -6570,4 +6570,4 @@ def show_cook(item):
         try: txt = open(os.path.join(file_cook), encoding="utf8").read()
         except: pass
 
-    if txt: platformtools.dialog_textviewer('Su fichero de Cookies', txt)
+    if txt: tools.dialog_textviewer('Su fichero de Cookies', txt)

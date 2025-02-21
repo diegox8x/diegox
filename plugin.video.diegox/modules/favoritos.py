@@ -15,9 +15,9 @@ else:
     import urllib
 
 
-from platformcode import config, logger, platformtools
-from core import filetools, scrapertools
-from core.item import Item
+from configuraciones import config, logger, tools
+from dox import filetools, scrapertools
+from dox.item import Item
 
 
 color_alert = config.get_setting('notification_alert_color', default='red')
@@ -27,7 +27,7 @@ color_avis = config.get_setting('notification_avis_color', default='yellow')
 color_exec = config.get_setting('notification_exec_color', default='cyan')
 
 
-plugin_addon = 'plugin://plugin.video.balandro/'
+plugin_addon = 'plugin://plugin.video.diegox/'
 
 favourites_path = filetools.translatePath('special://profile/favourites.xml')
 
@@ -51,7 +51,7 @@ def mainlist(item):
     matches = readFavourites()
 
     if not matches:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún no tiene Favoritos[/COLOR][/B]' % color_exec)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún no tiene Favoritos[/COLOR][/B]' % color_exec)
         return
 
     itemlist.append(item.clone( action='', title='[B]FAVORITOS:[/B]', folder=False, text_color='plum' ))
@@ -83,7 +83,7 @@ def mainlist(item):
 
     if itemlist:
         if ses == 0:
-            platformtools.dialog_notification(config.__addon_name, '[COLOR %s][B]Sin Favoritos de Balandro[/B][/COLOR]' % color_adver)
+            tools.dialog_notification(config.__addon_name, '[COLOR %s][B]Sin Favoritos de Balandro[/B][/COLOR]' % color_adver)
 
     return itemlist
 
@@ -100,7 +100,7 @@ def readFavourites():
 
         matches = scrapertools.find_multiple_matches(bloque, '<favourite([^<]*)</favourite>')
 
-        if len(matches) > 99: platformtools.dialog_notification(config.__addon_name, '[COLOR %s][B]Cargando Favoritos[/B][/COLOR]' % color_avis)
+        if len(matches) > 99: tools.dialog_notification(config.__addon_name, '[COLOR %s][B]Cargando Favoritos[/B][/COLOR]' % color_avis)
 
         for match in matches:
             name = scrapertools.find_single_match(match, 'name="([^"]*)')
@@ -141,7 +141,7 @@ def addFavourite(item):
     favourites_list.append((titulo, item.thumbnail, data))
 
     if saveFavourites(favourites_list):
-        platformtools.dialog_ok(config.__addon_name, '[COLOR yellow][B]' + titulo + '[/B][/COLOR]', 'Guardado en Favoritos')
+        tools.dialog_ok(config.__addon_name, '[COLOR yellow][B]' + titulo + '[/B][/COLOR]', 'Guardado en Favoritos')
         return True
 
     return False
@@ -157,11 +157,11 @@ def delFavourite(item):
     for fav in favourites_list:
         if plugin_addon in str(fav):
             if fav[0] == item.title or fav[0] == item.titulo:
-                if platformtools.dialog_yesno(config.__addon_name, '[COLOR red][B]¿ Confirma eliminar de Favoritos ?[/B][/COLOR]', '[COLOR yellow][B]' + item.titulo + '[/B][/COLOR]'):
+                if tools.dialog_yesno(config.__addon_name, '[COLOR red][B]¿ Confirma eliminar de Favoritos ?[/B][/COLOR]', '[COLOR yellow][B]' + item.titulo + '[/B][/COLOR]'):
                     favourites_list.remove(fav)
 
                     if saveFavourites(favourites_list):
-                        platformtools.dialog_notification(config.__addon_name, '[COLOR %s][B]Eliminado de Favoritos[/B][/COLOR]' % color_exec)
+                        tools.dialog_notification(config.__addon_name, '[COLOR %s][B]Eliminado de Favoritos[/B][/COLOR]' % color_exec)
                         return True
 
     return False
@@ -175,13 +175,13 @@ def renameFavourite(item):
     for i, fav in enumerate(favourites_list):
         if plugin_addon in str(fav):
             if fav[0] == item.from_title or fav[0] == item.titulo:
-                new_title = platformtools.dialog_input(item.from_title, item.title)
+                new_title = tools.dialog_input(item.from_title, item.title)
 
                 if new_title:
                     favourites_list[i] = (new_title, fav[1], fav[2])
 
                     if saveFavourites(favourites_list):
-                        platformtools.dialog_ok(config.__addon_name + ' - Favorito', '[COLOR yellow][B]' + item.titulo + '[/B][/COLOR]', 'Renombrado como: ', '[COLOR cyan][B]' + new_title + '[/B][/COLOR]')
+                        tools.dialog_ok(config.__addon_name + ' - Favorito', '[COLOR yellow][B]' + item.titulo + '[/B][/COLOR]', 'Renombrado como: ', '[COLOR cyan][B]' + new_title + '[/B][/COLOR]')
                         return True
 
     return False

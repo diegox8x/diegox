@@ -4,10 +4,10 @@ import re
 
 from datetime import datetime
 
-from platformcode import config, logger, platformtools
+from configuraciones import config, logger, tools
 
-from core.item import Item
-from core import httptools, scrapertools, tmdb
+from dox.item import Item
+from dox import httptools, scrapertools, tmdb
 
 from modules import search
 
@@ -136,7 +136,7 @@ def show_help(item):
     txt += '[CR]Al seleccionar una película/serie [COLOR chartreuse][B]se iniciará su búsqueda en los canales[/B][/COLOR] y se mostrarán los resultados encontrados.'
     txt += ' Hay que tener en cuenta que habrá películas/series que no tendrán enlaces en ninguno de los canales.'
 
-    platformtools.dialog_textviewer('Información búsquedas y listas en Filmaffinity', txt)
+    tools.dialog_textviewer('Información búsquedas y listas en Filmaffinity', txt)
     return True
 
 
@@ -194,7 +194,7 @@ def listas(item):
             elif item.search_type == 'person': texto = 'Nombre de la persona a buscar'
             else: texto = 'Texto a buscar'
 
-            tecleado = platformtools.dialog_input(last_search, texto)
+            tecleado = tools.dialog_input(last_search, texto)
 
             if tecleado is None or tecleado == '': return
 

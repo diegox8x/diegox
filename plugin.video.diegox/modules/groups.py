@@ -8,10 +8,10 @@ else: PY3 = False
 
 import os
 
-from platformcode import config, logger
-from core.item import Item
+from configuraciones import config, logger
+from dox.item import Item
 
-from core import channeltools, scrapertools
+from dox import channeltools, scrapertools
 
 
 color_list_prefe = config.get_setting('channels_list_prefe_color', default='gold')

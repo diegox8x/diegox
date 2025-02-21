@@ -10,9 +10,9 @@ else:
 
 import os, time, glob
 
-from platformcode import config, logger, platformtools
-from core.item import Item
-from core import filetools, jsontools
+from configuraciones import config, logger, tools
+from dox.item import Item
+from dox import filetools, jsontools
 
 STATUS_CODES = type("StatusCode", (), {"stopped": 0, "canceled": 1, "completed": 2, "error": 3})
 
@@ -80,7 +80,7 @@ def mainlist(item):
         itemlist.append(it)
 
     if elem == 0:
-        platformtools.dialog_notification(config.__addon_name, '[COLOR %s][B]Aún no tiene Descargas[/B][/COLOR]' % color_exec)
+        tools.dialog_notification(config.__addon_name, '[COLOR %s][B]Aún no tiene Descargas[/B][/COLOR]' % color_exec)
 
         try:
            filetools.rmdirtree(download_path)
@@ -100,7 +100,7 @@ def mainlist(item):
 
     itemlist.append(item.clone( channel='actions', action = 'open_settings', title= '[COLOR chocolate][B]Ajustes[/B][/COLOR] categoría [COLOR seagreen][B]Descargas[/B][/COLOR]', thumbnail=config.get_thumb('settings') ))
 
-    platformtools.itemlist_refresh()
+    tools.itemlist_refresh()
 
     return itemlist
 
@@ -136,7 +136,7 @@ def show_folder_downloads(item):
 
     txt += path
 
-    platformtools.dialog_textviewer('Ubicación de las Descargas', txt)
+    tools.dialog_textviewer('Ubicación de las Descargas', txt)
 
 
 def acciones_enlace(item):
@@ -155,12 +155,12 @@ def acciones_enlace(item):
     else:
         acciones = ['Eliminar descarga']
 
-    ret = platformtools.dialog_select('¿Qué hacer con esta descarga?', acciones)
+    ret = tools.dialog_select('¿Qué hacer con esta descarga?', acciones)
     if ret == -1: 
         return False
 
     elif acciones[ret] == 'Eliminar descarga':
-        if not platformtools.dialog_yesno('Eliminar descarga', '¿ [COLOR red][B]Confirma Eliminar la descarga[/B][/COLOR] %s ?' % item.title, 'Se eliminará el fichero %s y su json con la información.' % item.downloadFilename): 
+        if not tools.dialog_yesno('Eliminar descarga', '¿ [COLOR red][B]Confirma Eliminar la descarga[/B][/COLOR] %s ?' % item.title, 'Se eliminará el fichero %s y su json con la información.' % item.downloadFilename): 
             return False
 
         path_video = filetools.join(download_path, item.downloadFilename)
@@ -170,7 +170,7 @@ def acciones_enlace(item):
         if item.jsonfile and filetools.exists(item.jsonfile):
             filetools.remove(item.jsonfile)
 
-        platformtools.itemlist_refresh()
+        tools.itemlist_refresh()
         return True
 
     elif acciones[ret] == 'Continuar descarga':
@@ -183,7 +183,7 @@ def acciones_enlace(item):
         mediaurl = filetools.join(download_path, item.downloadFilename)
 
         xlistitem = xbmcgui.ListItem(path=mediaurl)
-        platformtools.set_infolabels(xlistitem, item, True)
+        tools.set_infolabels(xlistitem, item, True)
 
         # ~ se lanza el reproductor (no funciona si el play es desde el diálogo info !?)
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
@@ -199,13 +199,13 @@ def acciones_enlace(item):
         origen = filetools.join(download_path, item.downloadFilename)
         destino = filetools.join(destino_path, item.downloadFilename)
         if not filetools.copy(origen, destino, silent=False):
-            platformtools.dialog_ok(config.__addon_name, 'Error, no se ha podido copiar el fichero', origen, destino)
+            tools.dialog_ok(config.__addon_name, 'Error, no se ha podido copiar el fichero', origen, destino)
             return False
-        platformtools.dialog_notification('Fichero copiado', destino_path)
+        tools.dialog_notification('Fichero copiado', destino_path)
         return True
 
 
-# ~ Llamada desde menú contextual para una peli/episodio (parecido a platformtools.play_from_itemlist)
+# ~ Llamada desde menú contextual para una peli/episodio (parecido a tools.play_from_itemlist)
 def save_download(item):
     logger.info()
 
@@ -235,11 +235,11 @@ def save_download(item):
 
             if len(itemlist) == 0:
                 if notification_d_ok:
-                    platformtools.dialog_ok(config.__addon_name, 'Sin enlaces disponibles')
+                    tools.dialog_ok(config.__addon_name, 'Sin enlaces disponibles')
                 else:
-                    platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin enlaces disponibles[/COLOR][/B]' % color_exec)
+                    tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin enlaces disponibles[/COLOR][/B]' % color_exec)
 
-            itemlist = platformtools.formatear_enlaces_servidores(itemlist)
+            itemlist = tools.formatear_enlaces_servidores(itemlist)
 
             import xbmc
             erroneos = []
@@ -253,10 +253,10 @@ def save_download(item):
                     else:
                         opciones.append(it.title)
 
-                seleccion = platformtools.dialog_select('[COLOR seagreen]Descargas[/COLOR] disponibles en [COLOR yellow]%s[/COLOR]' % itemlist[0].channel.capitalize(), opciones)
+                seleccion = tools.dialog_select('[COLOR seagreen]Descargas[/COLOR] disponibles en [COLOR yellow]%s[/COLOR]' % itemlist[0].channel.capitalize(), opciones)
 
                 if seleccion == -1:
-                    # ~ platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Descarga cancelada[/B]' % color_infor)
+                    # ~ tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Descarga cancelada[/B]' % color_infor)
                     break
                 else:
                     # ~ Si el canal tiene play propio
@@ -275,15 +275,15 @@ def save_download(item):
                         elif isinstance(itemlist_play, basestring):
                             ok_play = False
                             if notification_d_ok:
-                                platformtools.dialog_ok(config.__addon_name, itemlist_play)
+                                tools.dialog_ok(config.__addon_name, itemlist_play)
                             else:
-                                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se Pudo descargar[/COLOR][/B]' % color_exec)
+                                tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se Pudo descargar[/COLOR][/B]' % color_exec)
                         else:
                             ok_play = False
                             if notification_d_ok:
-                                platformtools.dialog_ok(config.__addon_name, 'No se puede descargar')
+                                tools.dialog_ok(config.__addon_name, 'No se puede descargar')
                             else:
-                                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se Pudo Descargar2[/COLOR][/B]' % color_exec)
+                                tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se Pudo Descargar2[/COLOR][/B]' % color_exec)
 
                     else:
                         ok_play = download_video(itemlist[seleccion], item)
@@ -293,33 +293,33 @@ def save_download(item):
 
         else:
             if notification_d_ok:
-                platformtools.dialog_ok(config.__addon_name, 'Nada a descargar')
+                tools.dialog_ok(config.__addon_name, 'Nada a descargar')
             else:
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Nada a descargar[/COLOR][/B]' % color_exec)
+                tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Nada a descargar[/COLOR][/B]' % color_exec)
 
     except:
         import traceback
         logger.error(traceback.format_exc())
 
         if notification_d_ok:
-            platformtools.dialog_ok(config.__addon_name, 'Error al descargar')
+            tools.dialog_ok(config.__addon_name, 'Error al descargar')
         else:
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Error al descargar[/COLOR][/B]' % color_alert)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Error al descargar[/COLOR][/B]' % color_alert)
 
 
-# ~ (parecido a platformtools.play_video pero para descargar)
+# ~ (parecido a tools.play_video pero para descargar)
 def download_video(item, parent_item):
     logger.info(item)
     logger.info(parent_item)
 
-    platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Descarga en preparación[/COLOR][/B]' % color_exec)
+    tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Descarga en preparación[/COLOR][/B]' % color_exec)
 
     notification_d_ok = config.get_setting('notification_d_ok', default=True)
 
     if item.video_urls:
         video_urls, puedes, motivo = item.video_urls, True, ""
     else:
-        from core import servertools
+        from dox import servertools
         url_referer = item.url_referer if item.url_referer else parent_item.url
         video_urls, puedes, motivo = servertools.resolve_video_urls_for_playing(item.server, item.url, url_referer=url_referer)
 
@@ -329,7 +329,7 @@ def download_video(item, parent_item):
             motivo = '[COLOR crimson][B]Está en formato Comprimido[/B][/COLOR]'
 
     if not puedes:
-        platformtools.dialog_ok("No puedes descargar este vídeo porque ...", motivo, item.url)
+        tools.dialog_ok("No puedes descargar este vídeo porque ...", motivo, item.url)
         return False
 
     opciones = []
@@ -342,51 +342,51 @@ def download_video(item, parent_item):
 
     # ~ Si hay varias opciones dar a elegir, si sólo hay una reproducir directamente
     if len(opciones) > 1:
-        seleccion = platformtools.dialog_select("Seleccione una opción para [B][COLOR seagreen]" + item.server.capitalize() + '[/B][/COLOR]', opciones)
+        seleccion = tools.dialog_select("Seleccione una opción para [B][COLOR seagreen]" + item.server.capitalize() + '[/B][/COLOR]', opciones)
     else:
         seleccion = 0
 
     if seleccion == -1:
         return True
     else:
-        mediaurl, view, mpd = platformtools.get_video_seleccionado(item, seleccion, video_urls)
+        mediaurl, view, mpd = tools.get_video_seleccionado(item, seleccion, video_urls)
         if mediaurl == '':
-            platformtools.dialog_ok(config.__addon_name, 'No se encuentra el vídeo')
+            tools.dialog_ok(config.__addon_name, 'No se encuentra el vídeo')
             return False
 
         if mediaurl.endswith('.m3u8') or '.m3u8?' in mediaurl or 'm3u8' in video_urls[seleccion][0].lower():
             if notification_d_ok:
-                platformtools.dialog_ok(config.__addon_name, 'Los archivos M3u8 no están permitidos, no se descargan')
+                tools.dialog_ok(config.__addon_name, 'Los archivos M3u8 no están permitidos, no se descargan')
             else:
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Archivo M3u8 no permitido[/COLOR][/B]' % color_alert)
+                tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Archivo M3u8 no permitido[/COLOR][/B]' % color_alert)
             return False
 
         if mpd:
             if notification_d_ok:
-                platformtools.dialog_ok(config.__addon_name, 'Los archivos Mpd no están permitidos, no se descargan')
+                tools.dialog_ok(config.__addon_name, 'Los archivos Mpd no están permitidos, no se descargan')
             else:
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Archivo Mpd no permitido[/COLOR][/B]' % color_alert)
+                tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Archivo Mpd no permitido[/COLOR][/B]' % color_alert)
             return False
 
         if mediaurl.startswith('rtmp'):
             if notification_d_ok:
-                platformtools.dialog_ok(config.__addon_name, 'Los archivos Rtmp no está permitidos, no se descargan')
+                tools.dialog_ok(config.__addon_name, 'Los archivos Rtmp no está permitidos, no se descargan')
             else:
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Archivo Rtmp no permitido[/COLOR][/B]' % color_alert)
+                tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Archivo Rtmp no permitido[/COLOR][/B]' % color_alert)
             return False
 
         if item.server == 'torrent':
             if notification_d_ok:
-                platformtools.dialog_ok(config.__addon_name, 'Los archivos Torrent no están permitidos, no se descargan')
+                tools.dialog_ok(config.__addon_name, 'Los archivos Torrent no están permitidos, no se descargan')
             else:
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Archivo Torrent no permitido[/COLOR][/B]' % color_alert)
+                tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Archivo Torrent no permitido[/COLOR][/B]' % color_alert)
             return False
 
         if item.server == 'youtube':
             if notification_d_ok:
-                platformtools.dialog_ok(config.__addon_name, 'Los Vídeos de Youtube no están permitidos, no se descargan')
+                tools.dialog_ok(config.__addon_name, 'Los Vídeos de Youtube no están permitidos, no se descargan')
             else:
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Vídeo Youtube no permitido[/COLOR][/B]' % color_alert)
+                tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Vídeo Youtube no permitido[/COLOR][/B]' % color_alert)
             return False
 
         if parent_item.contentType == 'movie':
@@ -442,7 +442,7 @@ def download_video(item, parent_item):
 
 
 def do_download(mediaurl, file_name, parent_item, server_item):
-    from core import downloadtools
+    from dox import downloadtools
 
     download_path = config.get_setting('downloadpath', default='')
 
@@ -460,7 +460,7 @@ def do_download(mediaurl, file_name, parent_item, server_item):
 
         show_folder_downloads(parent_item)
 
-        if not platformtools.dialog_yesno(config.__addon_name, '¿ Confirma la ubicación de la [COLOR seagreen]Descarga[/COLOR] ?', la_ubicacion + '[/COLOR][/B]'): 
+        if not tools.dialog_yesno(config.__addon_name, '¿ Confirma la ubicación de la [COLOR seagreen]Descarga[/COLOR] ?', la_ubicacion + '[/COLOR][/B]'): 
             from modules import actions
 
             actions.open_settings(parent_item)
@@ -472,7 +472,7 @@ def do_download(mediaurl, file_name, parent_item, server_item):
             if not filetools.exists(download_path):
                 filetools.mkdir(download_path)
 
-        if not platformtools.dialog_yesno(config.__addon_name, '[B][COLOR %s]¿ Desea que se le siga formulando la pregunta respecto a confirmar la ubicación?[/COLOR][/B]' % color_exec): 
+        if not tools.dialog_yesno(config.__addon_name, '[B][COLOR %s]¿ Desea que se le siga formulando la pregunta respecto a confirmar la ubicación?[/COLOR][/B]' % color_exec): 
             config.set_setting('conf_ubicacion', False)
 
     # ~ Limpiar caracteres para nombre de fichero válido
@@ -492,13 +492,13 @@ def do_download(mediaurl, file_name, parent_item, server_item):
     update_download_json(path_down_json, down_stats)
 
     if down_stats['downloadStatus'] == STATUS_CODES.error:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se pudo descargar[/COLOR][/B]' % color_alert)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se pudo descargar[/COLOR][/B]' % color_alert)
         return False
     else:
         if down_stats['downloadStatus'] == STATUS_CODES.completed:
-            platformtools.dialog_ok(config.__addon_name + ' Descargas', '[COLOR cyan][B]Descarga Finalizada[/B][/COLOR]', '[COLOR yellow][B]' + file_name + '[/B][/COLOR]', config.format_bytes(down_stats['downloadSize']))
+            tools.dialog_ok(config.__addon_name + ' Descargas', '[COLOR cyan][B]Descarga Finalizada[/B][/COLOR]', '[COLOR yellow][B]' + file_name + '[/B][/COLOR]', config.format_bytes(down_stats['downloadSize']))
 
-        platformtools.itemlist_refresh()
+        tools.itemlist_refresh()
         return True
 
 

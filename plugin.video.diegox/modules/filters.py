@@ -2,9 +2,9 @@
 
 import os, xbmc, xbmcgui
 
-from platformcode import config, logger, platformtools
-from core.item import Item
-from core import channeltools, scrapertools, filetools, jsontools
+from configuraciones import config, logger, tools
+from dox.item import Item
+from dox import channeltools, scrapertools, filetools, jsontools
 
 
 color_list_prefe = config.get_setting('channels_list_prefe_color', default='gold')
@@ -87,7 +87,7 @@ def mainlist(item):
 
     itemlist.append(item.clone( title=' - [B]Quitar otros canales excluidos de [COLOR green]Todos[/B]', action='del_no_searchables', extra='all', text_color='red' ))
 
-    platformtools.itemlist_refresh()
+    tools.itemlist_refresh()
 
     return itemlist
 
@@ -103,7 +103,7 @@ def mainlist2(item):
     if channels_search_included:
         itemlist.append(item.clone( title = '[COLOR coral][B]Anular Todos los canales[COLOR greenyellow][B] para efectuar las búsquedas[/B][/COLOR]', action = 'channels_excluded_del', extra = 'included', folder = False, text_color='yellow' ))
 
-    platformtools.itemlist_refresh()
+    tools.itemlist_refresh()
 
     return itemlist
 
@@ -125,11 +125,11 @@ def del_no_searchables(item):
 
            if not config.get_setting(cfg_searchable_channel, default=False): continue
 
-           if platformtools.dialog_yesno(config.__addon_name + ' [B][COLOR yellow]' + ch['id'].capitalize() + '[/B][/COLOR]', '[COLOR red][B]¿ Confirma Quitar el canal excluido de búsquedas ?[/B][/COLOR]'):
+           if tools.dialog_yesno(config.__addon_name + ' [B][COLOR yellow]' + ch['id'].capitalize() + '[/B][/COLOR]', '[COLOR red][B]¿ Confirma Quitar el canal excluido de búsquedas ?[/B][/COLOR]'):
                i += 1
                config.set_setting(cfg_searchable_channel, False)
 
-    if i == 0: platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
+    if i == 0: tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
 
 
 def only_animes(item):
@@ -150,7 +150,7 @@ def only_animes(item):
     ch_list = channeltools.get_channels_list(filtros=filtros)
 
     if not ch_list:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
         return
 
     for ch in ch_list:
@@ -198,11 +198,11 @@ def only_animes(item):
         channel_name = ch['name']
         channel_thumb = ch['thumbnail']
 
-        opciones_channels.append(platformtools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
+        opciones_channels.append(tools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
 
         canales_animes.append((ch['name'], info, ch['notes']))
 
-    ret = platformtools.dialog_select(cabecera, opciones_channels, useDetails=True)
+    ret = tools.dialog_select(cabecera, opciones_channels, useDetails=True)
 
     if not ret == -1:
         canal = canales_animes[ret]
@@ -227,7 +227,7 @@ def only_adults(item):
     ch_list = channeltools.get_channels_list(filtros=filtros)
 
     if not ch_list:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
         return
 
     for ch in ch_list:
@@ -271,11 +271,11 @@ def only_adults(item):
         channel_name = ch['name']
         channel_thumb = ch['thumbnail']
 
-        opciones_channels.append(platformtools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
+        opciones_channels.append(tools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
 
         canales_adults.append((ch['name'], info, ch['notes']))
 
-    ret = platformtools.dialog_select(cabecera, opciones_channels, useDetails=True)
+    ret = tools.dialog_select(cabecera, opciones_channels, useDetails=True)
 
     if not ret == -1:
         canal = canales_adults[ret]
@@ -308,9 +308,9 @@ def with_proxies(item):
 
     if i == 0:
         if item.memo_proxies:
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales con proxies memorizados[/B][/COLOR]' % color_adver)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales con proxies memorizados[/B][/COLOR]' % color_adver)
         else:
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales con proxies a Configurar[/B][/COLOR]' % color_adver)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales con proxies a Configurar[/B][/COLOR]' % color_adver)
         return
 
     for ch in ch_list:
@@ -386,11 +386,11 @@ def with_proxies(item):
         channel_name = ch['name']
         channel_thumb = ch['thumbnail']
 
-        opciones_channels.append(platformtools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
+        opciones_channels.append(tools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
 
         canales_proxies.append((ch['name'], info, ch['notes']))
 
-    ret = platformtools.dialog_select(cabecera, opciones_channels, useDetails=True)
+    ret = tools.dialog_select(cabecera, opciones_channels, useDetails=True)
 
     if not ret == -1:
         canal = canales_proxies[ret]
@@ -428,7 +428,7 @@ def no_actives(item):
             i =+ 1
 
         if i == 0:
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
             return
 
     for ch in ch_list:
@@ -483,11 +483,11 @@ def no_actives(item):
         channel_name = ch['name']
         channel_thumb = ch['thumbnail']
 
-        opciones_channels.append(platformtools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
+        opciones_channels.append(tools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
 
         canales_no_actives.append((ch['name'], info, ch['notes']))
 
-    ret = platformtools.dialog_select(cabecera, opciones_channels, useDetails=True)
+    ret = tools.dialog_select(cabecera, opciones_channels, useDetails=True)
 
     if not ret == -1:
         canal = canales_no_actives[ret]
@@ -521,7 +521,7 @@ def only_prefered(item):
             i =+ 1
 
         if i == 0:
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales preferidos[/B][/COLOR]' % color_adver)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales preferidos[/B][/COLOR]' % color_adver)
             return
 
     for ch in ch_list:
@@ -569,11 +569,11 @@ def only_prefered(item):
         channel_name = ch['name']
         channel_thumb = ch['thumbnail']
 
-        opciones_channels.append(platformtools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
+        opciones_channels.append(tools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
 
         canales_only_prefered.append((ch['name'], info, ch['notes']))
 
-    ret = platformtools.dialog_select(cabecera, opciones_channels, useDetails=True)
+    ret = tools.dialog_select(cabecera, opciones_channels, useDetails=True)
 
     if not ret == -1:
         canal = canales_only_prefered[ret]
@@ -594,7 +594,7 @@ def only_torrents(item):
     ch_list = channeltools.get_channels_list(filtros=filtros)
 
     if not ch_list:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
         return
 
     for ch in ch_list:
@@ -639,11 +639,11 @@ def only_torrents(item):
         channel_name = ch['name']
         channel_thumb = ch['thumbnail']
 
-        opciones_channels.append(platformtools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
+        opciones_channels.append(tools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
 
         canales_torrents.append((ch['name'], info, ch['notes']))
 
-    ret = platformtools.dialog_select(cabecera, opciones_channels, useDetails=True)
+    ret = tools.dialog_select(cabecera, opciones_channels, useDetails=True)
 
     if not ret == -1:
         canal = canales_torrents[ret]
@@ -726,15 +726,15 @@ def channels_status(item):
         seleccionados = channels_preferidos_make(ret, channels_ids)
 
     if not str(seleccionados) == '[]':
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Canales Re-ajustados[/B][/COLOR]' % color_exec)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Canales Re-ajustados[/B][/COLOR]' % color_exec)
 
         if not item._helper:
             if item.des_rea:
-               platformtools.dialog_ok(config.__addon_name + ' - Canales Desactivados', '[COLOR yellow][B]Si efectuó alguna variación en sus Ajustes de Canales.[/COLOR][/B]', '[COLOR cyan][B]Recuerde, que para que los [COLOR gold]Cambios Surtan Efecto[/COLOR][COLOR cyan], deberá Abandonar el proceso de Ajustes e ingresar de nuevo en el.[/B][/COLOR]')
+               tools.dialog_ok(config.__addon_name + ' - Canales Desactivados', '[COLOR yellow][B]Si efectuó alguna variación en sus Ajustes de Canales.[/COLOR][/B]', '[COLOR cyan][B]Recuerde, que para que los [COLOR gold]Cambios Surtan Efecto[/COLOR][COLOR cyan], deberá Abandonar el proceso de Ajustes e ingresar de nuevo en el.[/B][/COLOR]')
             else:
-               platformtools.dialog_ok(config.__addon_name + ' - Canales Preferidos', '[COLOR yellow][B]Si efectuó alguna variación en sus Ajustes de Canales.[/COLOR][/B]', '[COLOR cyan][B]Recuerde, que para que los [COLOR gold]Cambios Surtan Efecto[/COLOR][COLOR cyan], deberá Abandonar el proceso de Ajustes e ingresar de nuevo en el.[/B][/COLOR]')
+               tools.dialog_ok(config.__addon_name + ' - Canales Preferidos', '[COLOR yellow][B]Si efectuó alguna variación en sus Ajustes de Canales.[/COLOR][/B]', '[COLOR cyan][B]Recuerde, que para que los [COLOR gold]Cambios Surtan Efecto[/COLOR][COLOR cyan], deberá Abandonar el proceso de Ajustes e ingresar de nuevo en el.[/B][/COLOR]')
 
-        platformtools.itemlist_refresh()
+        tools.itemlist_refresh()
 
 
 def channels_des_rea_make(ret, channels_ids):
@@ -854,7 +854,7 @@ def channels_excluded(item):
                 tex1 = '[COLOR plum]El orden de la lista de canales ha variado respecto a su lista anterior (Preferidos, Desactivados, Inactivos ó Anulados).[/COLOR]'
                 tex2 = '[COLOR cyan][B]Deberá seleccionar de nuevo los canales a excluir deseados.[/B][/COLOR]'
                 tex3 = '[COLOR red]Porque se eliminarán los canales memorizados para excluirlos en las búsquedas[/COLOR]'
-                platformtools.dialog_ok(config.__addon_name, tex1, tex2, tex3)
+                tools.dialog_ok(config.__addon_name, tex1, tex2, tex3)
                 config.set_setting(cfg_excludes, '')
                 preselect = []
 
@@ -937,7 +937,7 @@ def channels_excluded(item):
     if str(seleccionados) == '[]': seleccionados = ''
     config.set_setting(cfg_excludes, str(seleccionados))
 
-    platformtools.itemlist_refresh()
+    tools.itemlist_refresh()
 
 
 def channels_excluded_del(item):
@@ -981,7 +981,7 @@ def channels_excluded_del(item):
             if not id_canal == item.from_channel: continue
 
             if item.extra == 'included':
-               if platformtools.dialog_yesno(config.__addon_name + ' [COLOR greenyellow][B]Inclusiones[/B][/COLOR]', '[COLOR plum]' + id_canal + '[/COLOR]', '[COLOR red]¿ Desea Quitar el canal memorizado de Solo Buscar en ? [COLOR yellow] ' + txt + '[/COLOR]'):
+               if tools.dialog_yesno(config.__addon_name + ' [COLOR greenyellow][B]Inclusiones[/B][/COLOR]', '[COLOR plum]' + id_canal + '[/COLOR]', '[COLOR red]¿ Desea Quitar el canal memorizado de Solo Buscar en ? [COLOR yellow] ' + txt + '[/COLOR]'):
                    channels_search_included = config.get_setting(cfg_includes, default='')
 
                    el_memorizado = "'" + id_canal + "'"
@@ -990,17 +990,17 @@ def channels_excluded_del(item):
                        channels_search_included = str(channels_search_included).replace(el_memorizado, '').strip()
                        config.set_setting(cfg_includes, channels_search_included)
 
-                   platformtools.itemlist_refresh()
+                   tools.itemlist_refresh()
                    return
 
     if not item.extra == 'included':
         if txt_excluidos:
-            if not platformtools.dialog_yesno(config.__addon_name + ' [COLOR cyan][B]Exclusiones[/B][/COLOR]', '[COLOR plum][B]' + str(txt_excluidos) + '[/B][/COLOR]', '[COLOR red][B]¿ Desea anular los canales memorizados para excluirlos en las búsquedas de ? [COLOR yellow] ' + txt + '[/B][/COLOR]'):
+            if not tools.dialog_yesno(config.__addon_name + ' [COLOR cyan][B]Exclusiones[/B][/COLOR]', '[COLOR plum][B]' + str(txt_excluidos) + '[/B][/COLOR]', '[COLOR red][B]¿ Desea anular los canales memorizados para excluirlos en las búsquedas de ? [COLOR yellow] ' + txt + '[/B][/COLOR]'):
                 return
 
     if item.extra == 'included':
         if txt_excluidos:
-            if not platformtools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]Inclusiones[/B][/COLOR]', '[COLOR plum][B]' + str(txt_excluidos) + '[/B][/COLOR]', '[COLOR red][B]¿ Desea anular los canales memorizados para Incluirlos de Nuevo en las búsquedas de ? [COLOR yellow] ' + txt + '[/B][/COLOR]'):
+            if not tools.dialog_yesno(config.__addon_name + ' [COLOR yellow][B]Inclusiones[/B][/COLOR]', '[COLOR plum][B]' + str(txt_excluidos) + '[/B][/COLOR]', '[COLOR red][B]¿ Desea anular los canales memorizados para Incluirlos de Nuevo en las búsquedas de ? [COLOR yellow] ' + txt + '[/B][/COLOR]'):
                 return
 
         channels_search_included = config.get_setting(cfg_includes, default='')
@@ -1028,7 +1028,7 @@ def channels_excluded_del(item):
         if channels_search_excluded_mixed: config.set_setting(cfg_search_excluded_mixed, '')
         if channels_search_excluded_all: config.set_setting(cfg_search_excluded_all, '')
 
-    platformtools.itemlist_refresh()
+    tools.itemlist_refresh()
 
 
 def channels_excluded_list(ret, channels_ids, channels_search):
@@ -1122,7 +1122,7 @@ def show_servers_list(item):
     servidores = sorted(servidores)
 
     if not servidores:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin servidores de este tipo[/B][/COLOR]' % color_adver)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin servidores de este tipo[/B][/COLOR]' % color_adver)
         return
 
     thumb = config.get_thumb('bolt')
@@ -1193,16 +1193,16 @@ def show_servers_list(item):
         server_name = dict_server['name']
         server_thumb = thumb
 
-        opciones_servers.append(platformtools.listitem_to_select('[COLOR yellow]' + server_name + '[/COLOR]', info, server_thumb))
+        opciones_servers.append(tools.listitem_to_select('[COLOR yellow]' + server_name + '[/COLOR]', info, server_thumb))
 
         servers.append((server_name, info))
 
     if not opciones_servers:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin servidores de este tipo[/B][/COLOR]' % color_adver)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin servidores de este tipo[/B][/COLOR]' % color_adver)
         return
 
 
-    ret = platformtools.dialog_select(cabecera, opciones_servers, useDetails=True)
+    ret = tools.dialog_select(cabecera, opciones_servers, useDetails=True)
 
     if not ret == -1:
         servidor = servers[ret]
@@ -1252,7 +1252,7 @@ def show_channels_list(item):
         ch_list = channeltools.get_channels_list(filtros=filtros)
 
     if not ch_list:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
         return
 
     for ch in ch_list:
@@ -1357,12 +1357,12 @@ def show_channels_list(item):
         channel_name = ch['name']
         channel_thumb = ch['thumbnail']
 
-        opciones_channels.append(platformtools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
+        opciones_channels.append(tools.listitem_to_select('[COLOR yellow]' + channel_name + '[/COLOR]', info, channel_thumb))
 
         canales.append((ch['name'], info, ch['notes']))
 
     if not canales:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sin canales de este tipo[/B][/COLOR]' % color_adver)
         return
 
     if item.tipo == 'all':
@@ -1387,7 +1387,7 @@ def show_channels_list(item):
         elif item.onlyone == True: cabecera = 'Canales con [COLOR yellow]Un Único Servidor[/COLOR]'
         else: cabecera = 'Canales [COLOR yellow]Disponibles[/COLOR]'
 
-    ret = platformtools.dialog_select(cabecera, opciones_channels, useDetails=True)
+    ret = tools.dialog_select(cabecera, opciones_channels, useDetails=True)
 
     if not ret == -1:
         canal = canales[ret]
@@ -1438,14 +1438,14 @@ def show_clients_torrent(item):
         elif client_name == 'Xbmctorrent': client_recommended = '[COLOR goldenrod][B]  Obsoleto[/B][/COLOR]'
         else: client_recommended = ''
 
-        opciones_torrent.append(platformtools.listitem_to_select('[COLOR cyan]' + client_name + '[/COLOR]', '[COLOR moccasin]' + client_id + exists_torrent + '[/COLOR]' + client_recommended, thumb))
+        opciones_torrent.append(tools.listitem_to_select('[COLOR cyan]' + client_name + '[/COLOR]', '[COLOR moccasin]' + client_id + exists_torrent + '[/COLOR]' + client_recommended, thumb))
 
         torrents.append((client_name, client_id + exists_torrent))
 
     txt = 'Clientes/Motores externos para [COLOR yellow]Torrents[/COLOR]'
     if item.no_obsoletes: txt = '[COLOR cyan]Seleccionar[/COLOR] Cliente/Motor externo para Torrent'
 
-    ret = platformtools.dialog_select(txt, opciones_torrent, useDetails=True)
+    ret = tools.dialog_select(txt, opciones_torrent, useDetails=True)
 
     if ret == -1: return ret
 	
@@ -1458,19 +1458,19 @@ def show_clients_torrent(item):
     if 'soportados' in item.title:
         if 'Instalado' in str(torrent[1]):
             if not cliente_torrent == name:
-                platformtools.dialog_ok(torrent[0], torrent[1] + '[/COLOR]', 'Por favor, asignelo como [COLOR coral]Cliente/Motor Torrent Habitual[/COLOR]')
+                tools.dialog_ok(torrent[0], torrent[1] + '[/COLOR]', 'Por favor, asignelo como [COLOR coral]Cliente/Motor Torrent Habitual[/COLOR]')
         else:
             if name == 'Pulsar' or name == 'Quasar' or name == 'Stream' or name == 'Xbmctorrent':
-                platformtools.dialog_ok(torrent[0], torrent[1] + '[/COLOR]', '[COLOR cyan][B]No lo puede Asignar, está Obsoleto[/B][/COLOR]')
+                tools.dialog_ok(torrent[0], torrent[1] + '[/COLOR]', '[COLOR cyan][B]No lo puede Asignar, está Obsoleto[/B][/COLOR]')
             else:
-                platformtools.dialog_ok(torrent[0], torrent[1] + '[/COLOR]', '[COLOR yellowgreen][B]No lo puede Asignar, falta instalarlo[/B][/COLOR]')
+                tools.dialog_ok(torrent[0], torrent[1] + '[/COLOR]', '[COLOR yellowgreen][B]No lo puede Asignar, falta instalarlo[/B][/COLOR]')
             return -1
 
     return sel_ret
 
 
 def search_new_proxies(canal_0, canal_1, canal_2, item):
-    if platformtools.dialog_yesno(canal_0 + '[COLOR red] Proxies Canal[/COLOR]', canal_1, '¿ Efectuar [COLOR cyan][B]Nueva Búsqueda[/B][/COLOR] de [COLOR red][B]Proxies[/B][/COLOR] en el Canal ?'):
+    if tools.dialog_yesno(canal_0 + '[COLOR red] Proxies Canal[/COLOR]', canal_1, '¿ Efectuar [COLOR cyan][B]Nueva Búsqueda[/B][/COLOR] de [COLOR red][B]Proxies[/B][/COLOR] en el Canal ?'):
         channels_proxies_memorized = config.get_setting('channels_proxies_memorized', default='')
         iniciales_channels_proxies_memorized = channels_proxies_memorized
 
@@ -1489,7 +1489,7 @@ def search_new_proxies(canal_0, canal_1, canal_2, item):
     return False
 
 def tests_channels(canal_0, canal_1, canal_2):
-    if platformtools.dialog_yesno(canal_0 + '[COLOR yellow] Test Canal[/COLOR]', '[COLOR cyan][B]¿ Desea Efectuar el Test Web del Canal ?[/B][/COLOR]', canal_1, canal_2):
+    if tools.dialog_yesno(canal_0 + '[COLOR yellow] Test Canal[/COLOR]', '[COLOR cyan][B]¿ Desea Efectuar el Test Web del Canal ?[/B][/COLOR]', canal_1, canal_2):
         from modules import tester
 
         config.set_setting('developer_test_channels', '')
@@ -1497,10 +1497,10 @@ def tests_channels(canal_0, canal_1, canal_2):
         try:
             tester.test_channel(canal_0)
         except:
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Error comprobación, Reintentelo de Nuevo[/B][/COLOR]' % color_alert)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Error comprobación, Reintentelo de Nuevo[/B][/COLOR]' % color_alert)
 
 def tests_servers(servidor_0, servidor_1):
-    if platformtools.dialog_yesno(servidor_0 + '[COLOR goldenrod] Servidor[/COLOR]','[COLOR goldenrod][B]¿ Efectuar Test Web del Servidor ?[/B][/COLOR]', servidor_1):
+    if tools.dialog_yesno(servidor_0 + '[COLOR goldenrod] Servidor[/COLOR]','[COLOR goldenrod][B]¿ Efectuar Test Web del Servidor ?[/B][/COLOR]', servidor_1):
         from modules import tester
 
         config.set_setting('developer_test_servers', '')
@@ -1508,5 +1508,5 @@ def tests_servers(servidor_0, servidor_1):
         try:
             tester.test_server(servidor_0)
         except:
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Error comprobación, Reintentelo de Nuevo[/B][/COLOR]' % color_alert)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Error comprobación, Reintentelo de Nuevo[/B][/COLOR]' % color_alert)
 
