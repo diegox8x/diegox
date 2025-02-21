@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.diego" name="Diegox" version="4.0.15" provider-name="Team Diegox">
+<addon id="plugin.video.diegox" name="Diegox" version="4.0.15" provider-name="Team Diegox">
   <requires>
     <import addon="script.module.requests"/>
   </requires>
