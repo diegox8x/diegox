@@ -4,11 +4,11 @@ import os, re, time
 
 from datetime import datetime
 
-from core.item import Item
+from dox.item import Item
 
-from platformcode import config, logger, platformtools
+from configuraciones import config, logger, tools
 
-from core import trackingtools, filetools, scrapertools
+from dox import trackingtools, filetools, scrapertools
 
 
 color_alert = config.get_setting('notification_alert_color', default='red')
@@ -69,41 +69,41 @@ def addFavourite(item):
     if item.contentType not in ['movie', 'tvshow', 'season', 'episode']:
         notification_d_ok = config.get_setting('notification_d_ok', default=True)
         if notification_d_ok:
-            platformtools.dialog_ok(config.__addon_name, 'Sólo Películas, Series, Temporadas ó Episodios')
+            tools.dialog_ok(config.__addon_name, 'Sólo Películas, Series, Temporadas ó Episodios')
         else:
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sólo Películas, Series, Temporadas ó Episodios[/COLOR][/B]' % color_avis)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Sólo Películas, Series, Temporadas ó Episodios[/COLOR][/B]' % color_avis)
         return False
 
     # ~ Si no está definido tmdb_id seleccionar
     if item.contentType in ['movie', 'tvshow'] and not item.infoLabels['tmdb_id']:
         tipo = 'película' if item.contentType == 'movie' else 'serie'
-        platformtools.dialog_ok(config.__addon_name, '[COLOR red][B]La %s no está correctamente identificada para TMDB.[/B][/COLOR]' % tipo, '[COLOR yellow][B]Si se presentasen varias opciones posibles[/B][/COLOR], [COLOR cyan][B]Seleccione una de ellas[/B][/COLOR] y sino [COLOR yellowgreen][B]Modificar el Texto de búsqueda.[/B][/COLOR]')
+        tools.dialog_ok(config.__addon_name, '[COLOR red][B]La %s no está correctamente identificada para TMDB.[/B][/COLOR]' % tipo, '[COLOR yellow][B]Si se presentasen varias opciones posibles[/B][/COLOR], [COLOR cyan][B]Seleccione una de ellas[/B][/COLOR] y sino [COLOR yellowgreen][B]Modificar el Texto de búsqueda.[/B][/COLOR]')
 
-        from core import tmdb
+        from dox import tmdb
 
         ret = tmdb.dialog_find_and_set_infoLabels(item)
         if not ret:
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Proceso cancelado[/COLOR][/B]' % color_adver)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Proceso cancelado[/COLOR][/B]' % color_adver)
             return False
 
     # ~ Si está activada la confirmación de tmdb_id
     elif config.get_setting('tracking_confirm_tmdbid', default=False):
         if item.contentType in ['movie', 'tvshow']:
-            from core import tmdb
+            from dox import tmdb
 
             ret = tmdb.dialog_find_and_set_infoLabels(item)
             if not ret:
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Proceso cancelado[/COLOR][/B]' % color_adver)
+                tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Proceso cancelado[/COLOR][/B]' % color_adver)
                 return False
         else:
             # ~ para temporadas/episodios no perder season/episode
             it_ant = item.clone()
 
-            from core import tmdb
+            from dox import tmdb
 
             ret = tmdb.dialog_find_and_set_infoLabels(item)
             if not ret:
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Proceso cancelado[/COLOR][/B]' % color_adver)
+                tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Proceso cancelado[/COLOR][/B]' % color_adver)
                 return False
 
             item.contentType = it_ant.contentType
@@ -112,7 +112,7 @@ def addFavourite(item):
 
     # ~ Si es una película/serie, completar información de tmdb si no se tiene activado tmdb_plus_info (para season/episodio no hace falta pq ya se habrá hecho la "segunda pasada")
     if item.contentType in ['movie', 'tvshow'] and not config.get_setting('tmdb_plus_info', default=False):
-        from core import tmdb
+        from dox import tmdb
 
         # ~ obtener más datos en "segunda pasada" (actores, duración, ...)
         tmdb.set_infoLabels_item(item)
@@ -123,7 +123,7 @@ def addFavourite(item):
     elif item.contentType == 'season': tit = 'Guardando temporada'; sub = '[B][COLOR %s]Obteniendo episodios[/COLOR][/B]' % color_infor
     else:tit = 'Guardando episodio'; sub = '[B][COLOR %s]Obteniendo datos[/COLOR][/B]' % color_infor
 
-    platformtools.dialog_notification(tit, sub)
+    tools.dialog_notification(tit, sub)
 
     done = ''
 
@@ -136,14 +136,14 @@ def addFavourite(item):
     if not done:
         if msg:
             if not config.get_setting('developer_mode', default=False):
-                platformtools.dialog_notification(config.__addon_name, '[B][COLOR red]No se Pudo Añadir los Enlaces[/COLOR][/B]')
+                tools.dialog_notification(config.__addon_name, '[B][COLOR red]No se Pudo Añadir los Enlaces[/COLOR][/B]')
             else:
-                platformtools.dialog_ok(config.__addon_name, '[B][COLOR red]No se Pudieron Añadir los Enlaces[/COLOR][/B]', msg)
+                tools.dialog_ok(config.__addon_name, '[B][COLOR red]No se Pudieron Añadir los Enlaces[/COLOR][/B]', msg)
         return False
 
     tit = item.contentTitle if item.contentType == 'movie' else item.contentSerieName
     el_canal = ('Añadidos enlaces de [B][COLOR %s]' + item.channel) % color_avis
-    platformtools.dialog_notification(tit, el_canal + '[/COLOR][/B]')
+    tools.dialog_notification(tit, el_canal + '[/COLOR][/B]')
     return True
 
 
@@ -167,7 +167,7 @@ def mainlist(item):
     db.close()
 
     if (count_movies + count_shows + count_episodes) == 0:
-        platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún no tiene Preferidos[/COLOR][/B]' % color_exec)
+        tools.dialog_notification(config.__addon_name, '[B][COLOR %s]Aún no tiene Preferidos[/COLOR][/B]' % color_exec)
 
         # ~ Si existe Preferidos pero NO Hay contenido
         try:
@@ -205,7 +205,7 @@ def mainlist(item):
 
     itemlist.append(item.clone( channel='actions', title= '[COLOR chocolate][B]Ajustes[/B][/COLOR] categoría [COLOR wheat][B]Preferidos[/B][/COLOR]', action = 'open_settings', thumbnail=config.get_thumb('settings') ))
 
-    platformtools.itemlist_refresh()
+    tools.itemlist_refresh()
 
     return itemlist
 
@@ -474,10 +474,10 @@ def findvideos(item):
             rows = db.get_episode_channels(item.infoLabels['tmdb_id'], item.infoLabels['season'], item.infoLabels['episode'])
             infolabels = db.get_episode(item.infoLabels['tmdb_id'], item.infoLabels['season'], item.infoLabels['episode'])
         except:
-            platformtools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se localizaron Enlaces[/COLOR][/B]' % color_exec)
+            tools.dialog_notification(config.__addon_name, '[B][COLOR %s]No se localizaron Enlaces[/COLOR][/B]' % color_exec)
             return None
 
-    from core import channeltools
+    from dox import channeltools
 
     for channel, url in rows:
         ch_parms = channeltools.get_channel_parameters(channel)
@@ -511,13 +511,13 @@ def findvideos(item):
             if info: info = info + '  '
             info = info + '[COLOR mediumaquamarine]' + idiomas + '[/COLOR]'
 
-            opciones.append(platformtools.listitem_to_select(ch_parms['name'], info, ch_parms['thumbnail']))
+            opciones.append(tools.listitem_to_select(ch_parms['name'], info, ch_parms['thumbnail']))
             opciones_row.append([channel, url])
 
     db.close()
 
     if len(opciones) == 0:
-        platformtools.dialog_ok(config.__addon_name, '[B][COLOR %s]No hay enlaces Guardados en Ningún Canal ó [COLOR yellow]los Canales Guardados ya NO están Activos[/COLOR].[/B][/COLOR]' % color_exec)
+        tools.dialog_ok(config.__addon_name, '[B][COLOR %s]No hay enlaces Guardados en Ningún Canal ó [COLOR yellow]los Canales Guardados ya NO están Activos[/COLOR].[/B][/COLOR]' % color_exec)
         return None
 
     # ~ Sólo hay un canal, ir a él directamente
@@ -525,7 +525,7 @@ def findvideos(item):
 
     else:
         # ~ canal preferente preseleccionado u ordenar por updated o último usado ?
-        ret = platformtools.dialog_select('¿ De qué canal desea obtener los enlaces ?', opciones, useDetails=True)
+        ret = tools.dialog_select('¿ De qué canal desea obtener los enlaces ?', opciones, useDetails=True)
         if ret == -1: return None
 
     it_sel = Item().fromurl(opciones_row[ret][1])
