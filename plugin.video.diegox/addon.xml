@@ -6,17 +6,6 @@
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">Your add-on's summary</summary>
     <description lang="en_GB">Your add-on's description</description>
-    <disclaimer lang="en_GB"></disclaimer>
-    <language>en</language> <!-- language of the content the add-on provides, omit if the add-on does not provide any content -->
-    <platform>all</platform>
-    <license>GPL-2.0-or-later</license>
-    <forum>https://forum.kodi.tv/showthread.php?tid=xxxx</forum> <!-- may be omitted -->
-    <website>http://myplugin.com</website> <!-- URL of the website that supplies the content, or the website for your plugin; may be omitted. -->
-    <email>you@youremail.com</email> <!-- may be omitted -->
-    <news>v1.2.3 (01/02/2013)
-      [new] some new feature
-      [fix] some fix
-    </news>
     <assets>
         <icon>icon.png</icon>
         <fanart>fanart.jpg</fanart>
