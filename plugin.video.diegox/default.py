@@ -1,9 +1,3 @@
-import xbmcaddon
-import xbmcplugin
-import xbmcgui
-import sys
+import logger
 
-addon_handle = int(sys.argv[1])
-xbmcplugin.setContent(addon_handle, 'videos')
-
-xbmcgui.Dialog().ok("Mi Addon", "¡Hola desde Kodi!"
+logger.debug("Hello World")
