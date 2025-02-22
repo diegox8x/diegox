@@ -1,23 +1,26 @@
-import requests
-from bs4 import BeautifulSoup
+import scrapy
 
-def get_videos():
-    url = "https://www3.animeflv.net/"
-    headers = {"User-Agent": "Mozilla/5.0"}
+class AnimeFLVSpider(scrapy.Spider):
+    name = "animeflv"
+    start_urls = ["https://www3.animeflv.net/" ]
+
+    def parse(self, response):
+        for anime in response.css(".ListAnimes .Item a::attr(href)").getall():
+            anime_url = response.urljoin(anime)
+            yield scrapy.Request(anime_url, callback=self.parse_anime)
     
-    response = requests.get(url, headers=headers)
-    if response.status_code != 200:
-        return []
-
-    soup = BeautifulSoup(response.text, "html.parser")
-    video_elements = soup.find_all("div", class_="video-item")
-
-    videos = []
-    for video in video_elements:
-        title = video.find("h2").text
-        thumbnail = video.find("img")["src"]
-        video_url = video.find("a")["href"]
-
-        videos.append({"title": title, "thumbnail": thumbnail, "url": video_url})
-
-    return videos
+    def parse_anime(self, response):
+        title = response.css(".Ficha.fchlt h1::text").get()
+        image = response.css(".Ficha.fchlt .Image img::attr(src)").get()
+        
+        episodes = []
+        for episode in response.css(".ListCaps a"):  
+            ep_number = episode.css("::text").get()
+            ep_link = response.urljoin(episode.attrib["href"])
+            episodes.append({"number": ep_number, "url": ep_link})
+        
+        yield {
+            "title": title,
+            "image": image,
+            "episodes": episodes,
+        }
