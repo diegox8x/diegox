@@ -13,14 +13,13 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=xxxx</forum> <!-- may be omitted -->
     <website>http://myplugin.com</website> <!-- URL of the website that supplies the content, or the website for your plugin; may be omitted. -->
     <email>you@youremail.com</email> <!-- may be omitted -->
-    <source>http://github.com/you/plugin.addon.id</source>
     <news>v1.2.3 (01/02/2013)
       [new] some new feature
       [fix] some fix
     </news>
     <assets>
-        <icon>resources/icon.png</icon>
-        <fanart>resources/fanart.jpg</fanart>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
         <banner></banner> <!-- optional -->
         <clearlogo>resources/clearlogo.png</clearlogo> <!-- optional -->
         <screenshot></screenshot> <!-- optional, max. 10 -->
